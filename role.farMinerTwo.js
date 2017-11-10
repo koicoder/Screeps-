@@ -42,5 +42,11 @@ run: function(creep) {
                 creep.moveTo(creep.pos.findClosestByRange(exit));
             }
     }
+    if(creep.room.name == 'W68N33'){
+            creep.moveTo(0,39)
+        }
+    if(creep.room.name == 'W53N38' && creep.memory.target == 'W54N38'){
+            creep.moveTo(0,44)
+        }
 }
 };

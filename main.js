@@ -30,518 +30,11 @@ var rolePwrHealer = require('role.pwrHealer');
 // Import Prototypes
 require('prototype.tower');
 require('prototype.resvMgmt');
-// require('prototype.SpawnCreeps');
+require('prototype.SpawnCreeps');
 require('prototype.links');
 //Main
 module.exports.loop = function () {
 
-    // Remove Extra Creep names (less Memory as a non loop?)
-    for(var name in Memory.creeps) {
-        if(!Game.creeps[name]) {
-            delete Memory.creeps[name];
-        }
-    }
-    // Tower Logic 
-    var towers = _.filter(Game.structures, s => s.structureType == STRUCTURE_TOWER && s.energy > 0);
-    for(let tower of towers) {
-        tower.defend();
-    }
-    // Link logic
-    var links = _.filter(Game.structures, s => s.structureType == STRUCTURE_LINK && s.cooldown == 0 && s.energy > 200 != s.pos.inRangeTo(s.room.storage, 3) == true != s.pos.inRangeTo(s.room.controller, 4) == true);
-    for(let link of links){
-        link.linkLogic();
-    }
-    
-    var obs7 = Game.getObjectById('59ecdc4bdcf9c40e1eb02056');
-    obs7.observeRoom('W54N37');
-    /*
-    // For CyberTron!                  currentSpawn.memory. = ;
-    
-    var allSpawn = _.filter(Game.spawns, (s) => s.spawning == null && s.room.energyAvailable > 299 && s.spawnMemSaver == 0);
-
-    for(let currentSpawn of allSpawn){
-        if(currentSpawn.room.name == 'W62N38'){
-            if(invFlg6237.memory.hostiles == true){
-                var currentAmountCheck = _.filter(Game.creeps, (creep) => creep.memory.role == 'defender' && creep.memory.target == 'W62N37');
-                if(currentAmountCheck == undefined){
-                    var rm1Defs = 1;
-                    currentSpawn.memory.exRm1Hostiles = true; 
-                }
-            } else{
-                var rm1Defs = 0;
-                currentSpawn.memory.exRm1Hostiles = false;
-            }
-            if(flg1.memory.RES6237 < 2500){
-                var currentAmountCheck = _.filter(Game.creeps, (creep) => creep.memory.role == 'claimer' && creep.memory.target == 'W62N37');
-                if(currentAmountCheck == undefined){
-                    var rm1Claimers = 1;
-                    currentSpawn.memory.exRm1Claimer = true;
-                }
-                
-            } else{
-                var rm1Claimers = 0;
-                currentSpawn.memory.exRm1Claimer = false;
-            }
-            if(min1.ticksToRegeneration == undefined){
-                var currentAmountCheck = _.filter(Game.creeps, (creep) => creep.memory.role == 'minMiner' && creep.memory.home == currentSpawn.room.name);
-                if(currentAmountCheck == undefined){
-                    var rm1MinMiners = 1;
-                    currentSpawn.memory.rmMin = true;
-                }
-            } else{
-                var rm1MinMiners = 0;
-                currentSpawn.memory.rmMin = false;
-            }
-            if(Game.rooms['W62N38'].storage > 800000){
-                var currentAmountCheck = _.filter(Game.creeps, (creep) => creep.memory.role == 'wallRepairer' && creep.memory.target == currentSpawn.room.name);
-                if(currentAmountCheck == undefined){
-                    var rm1WallRepairers = 1;
-                }
-            } else{
-                var rm1WallRepairers = 0;
-            }
-            var roleArray = [['bus', '1']['collectorTwo','2']['busTower','1']['upgrader','1']['linker','1']['labNukeTran','1']['builder','0']['defender', rm1Defs]['claimer', rm1Claimers]['farMinerTwo','2']['conTranTwo','2']['minMiner', rm1MinMiners]['wallRepairer', rm1WallRepairers]]; 
-            currentSpawn.rmMgmt(roleArray);
-        } else if(currentSpawn.room.name == 'W62N39'){
-            if(invFlg6338.memory.hostiles == true || invFlg6339.memory.hostiles == true){
-                var rm2Defs = 0;
-                if(invFlg6338.memory.hostiles == true){
-                    var currentAmountCheck = _.filter(Game.creeps, (creep) => creep.memory.role == 'defender' && creep.memory.target == 'W63N38');
-                    if(currentAmountCheck == undefined){
-                        rm2Defs = rm2Defs + 1;
-                        currentSpawn.memory.exRm1Hostiles = true;
-                    }
-                } else{
-                    currentSpawn.memory.exRm1Hostiles = false;
-                }
-                if(invFlg6339.memory.hostiles == true){
-                    var currentAmountCheck = _.filter(Game.creeps, (creep) => creep.memory.role == 'defender' && creep.memory.target == 'W63N39');
-                    if(currentAmountCheck == undefined){
-                        rm2Defs = rm2Defs + 1;
-                        currentSpawn.memory.exRm2Hostiles = true;
-                    }
-                } else{
-                    currentSpawn.memory.exRm2Hostiles = false;
-                }
-            }
-            if(flg1.memory.RES6339 < 2500 || flg1.memory.RES6338 < 3000){
-                var rm2Claimers = 0;
-                if(flg1.memory.RES6338 < 2500){
-                    var currentAmountCheck = _.filter(Game.creeps, (creep) => creep.memory.role == 'claimer' && creep.memory.target == 'W63N38');
-                    if(currentAmountCheck == undefined){
-                        rm2Claimers = rm2Claimers + 1;
-                        currentSpawn.memory.exRm1Claimer = true;
-                    }
-                } else{
-                    currentSpawn.memory.exRm1Claimer = false;
-                }
-                if(flg1.memory.RES6339 < 2500){
-                    var currentAmountCheck = _.filter(Game.creeps, (creep) => creep.memory.role == 'claimer' && creep.memory.target == 'W62N37');
-                    if(currentAmountCheck == undefined){
-                        rm2Claimers = rm2Claimers + 1;
-                        currentSpawn.memory.exRm2Claimer = true;
-                    }
-                } else{
-                    currentSpawn.memory.exRm2Claimer = false;
-                }
-            }
-            if(min2.ticksToRegeneration == undefined){
-                var currentAmountCheck = _.filter(Game.creeps, (creep) => creep.memory.role == 'minMiner' && creep.memory.home == currentSpawn.room.name);
-                if(currentAmountCheck == undefined){
-                    var rm2MinMiners = 1;
-                }
-            } else{
-                var rm2MinMiners = 0;
-            }
-            if(Game.rooms['W62N39'].storage > 800000){
-                var currentAmountCheck = _.filter(Game.creeps, (creep) => creep.memory.role == 'wallRepairer' && creep.memory.target == currentSpawn.room.name);
-                if(currentAmountCheck == undefined){
-                    var rm2WallRepairers = 1;
-                }
-            } else{
-                var rm2WallRepairers = 0;
-            }
-            var roleArray = [['bus', '1']['collectorTwo','2']['busTower','1']['upgrader','1']['sweep','1']['labNukeTran','1']['builder','0']['defender', rm2Defs]['claimer', rm2Claimers]['farMinerTwo','2']['conTranTwo','2']['minMiner', rm2MinMiners]['wallRepairer', rm2WallRepairers]]; 
-            currentSpawn.rmMgmt(roleArray);
-        } else if(currentSpawn.room.name == 'W57N37'){
-            if(invFlg5736.memory.hostiles == true || invFlg5738.memory.hostiles == true || invFlg5637.memory.hostiles == true || invFlg5837.memory.hostiles == true || invFlg5638.memory.hostiles == true){
-                var rm3Defs = 0;
-                if(invFlg5736.memory.hostiles == true){
-                    var currentAmountCheck = _.filter(Game.creeps, (creep) => creep.memory.role == 'defender' && creep.memory.target == 'W57N36');
-                    if(currentAmountCheck == undefined){
-                    currentSpawn.memory.exRm1Hostiles = true;
-                    rm3Defs = rm3Defs + 1
-                    }
-                } else{
-                    currentSpawn.memory.exRm1Hostiles = false;
-                }
-                if(invFlg5738.memory.hostiles == true){
-                    var currentAmountCheck = _.filter(Game.creeps, (creep) => creep.memory.role == 'defender' && creep.memory.target == 'W57N38');
-                    if(currentAmountCheck == undefined){
-                    currentSpawn.memory.exRm2Hostiles = true;
-                    rm3Defs = rm3Defs + 1;
-                    }
-                } else{
-                    currentSpawn.memory.exRm2Hostiles = false;
-                }
-                if(invFlg5637.memory.hostiles == true){
-                    var currentAmountCheck = _.filter(Game.creeps, (creep) => creep.memory.role == 'defender' && creep.memory.target == 'W56N37');
-                    if(currentAmountCheck == undefined){
-                    currentSpawn.memory.exRm3Hostiles = true;
-                    rm3Defs = rm3Defs + 1;
-                    }
-                } else{
-                    currentSpawn.memory.exRm3Hostiles = false;
-                }
-                if(invFlg5837.memory.hostiles == true){
-                    var currentAmountCheck = _.filter(Game.creeps, (creep) => creep.memory.role == 'defender' && creep.memory.target == 'W58N37');
-                    if(currentAmountCheck == undefined){
-                    currentSpawn.memory.exRm4Hostiles = true;
-                    rm3Defs = rm3Defs + 1;
-                    }
-                } else{
-                    currentSpawn.memory.exRm4Hostiles = false;
-                }
-                if(invFlg5638.memory.hostiles == true){
-                    var currentAmountCheck = _.filter(Game.creeps, (creep) => creep.memory.role == 'defender' && creep.memory.target == 'W56N38');
-                    if(currentAmountCheck == undefined){
-                    currentSpawn.memory.exRm5Hostiles = true;
-                    rm3Defs = rm3Defs + 1;
-                    }
-                } else{
-                    currentSpawn.memory.exRm5Hostiles = false;
-                }
-            } else{
-                var rm3Defs = 0;
-            }
-            if(flg1.memory.RES5736 < 2500 || flg1.memory.RES5738 < 2500 || flg1.memory.RES5637 < 2500 || flg1.memory.RE5837 < 2500 || flg1.memory.RES5638 < 2500){
-                var rm3Claimers = 0;
-                if(flg1.memory.RES5736 < 2500){
-                    var currentAmountCheck = _.filter(Game.creeps, (creep) => creep.memory.role == 'claimer' && creep.memory.target == 'W57N36');
-                    if(currentAmountCheck == undefined){
-                        rm3Claimers = rm3Claimers + 1;
-                        currentSpawn.memory.exRm1Claimer = true;
-                    }
-                } else{
-                    currentSpawn.memory.exRm1Claimer = false;
-                }
-                if(flg1.memory.RES5738 < 2500){
-                    var currentAmountCheck = _.filter(Game.creeps, (creep) => creep.memory.role == 'claimer' && creep.memory.target == 'W57N38');
-                    if(currentAmountCheck == undefined){
-                        rm3Claimers = rm3Claimers + 1;
-                        currentSpawn.memory.exRm2Claimer = true;
-                    }
-                } else{
-                    currentSpawn.memory.exRm2Claimer = false;
-                }
-                if(flg1.memory.RES5637 < 2500){
-                    var currentAmountCheck = _.filter(Game.creeps, (creep) => creep.memory.role == 'claimer' && creep.memory.target == 'W56N37');
-                    if(currentAmountCheck == undefined){
-                    rm3Claimers = rm3Claimers + 1;
-                    currentSpawn.memory.exRm3Claimer = true;
-                    }
-                } else{
-                    currentSpawn.memory.exRm3Claimer = false;
-                }
-                if(flg1.memory.RES5837 < 2500){
-                    var currentAmountCheck = _.filter(Game.creeps, (creep) => creep.memory.role == 'claimer' && creep.memory.target == 'W58N37');
-                    if(currentAmountCheck == undefined){
-                    rm3Claimers = rm3Claimers + 1;
-                    currentSpawn.memory.exRm4Claimer = true;
-                    }
-                } else{
-                    currentSpawn.memory.exRm4Claimer = false;
-                }
-                if(flg1.memory.RES5638 < 2500){
-                    var currentAmountCheck = _.filter(Game.creeps, (creep) => creep.memory.role == 'claimer' && creep.memory.target == 'W56N38');
-                    if(currentAmountCheck == undefined){
-                    rm3Claimers = rm3Claimers + 1;
-                    currentSpawn.memory.exRm5Claimer = true;
-                    }
-                } else{
-                    currentSpawn.memory.exRm5Claimer = false;
-                }
-            } else{
-                var rm3Claimers = 0;
-            }
-            if(min3.ticksToRegeneration == undefined){
-                var currentAmountCheck = _.filter(Game.creeps, (creep) => creep.memory.role == 'minMiner' && creep.memory.home == currentSpawn.room.name);
-                if(currentAmountCheck == undefined){
-                var rm3MinMiners = 1;
-                }
-            } else{
-                var rm3MinMiners = 0;
-            }
-            if(Game.rooms['W57N37'].storage > 800000){
-                var currentAmountCheck = _.filter(Game.creeps, (creep) => creep.memory.role == 'wallRepairer' && creep.memory.target == currentSpawn.room.name);
-                if(currentAmountCheck == undefined){
-                var rm3WallRepairers = 1;
-                }
-            } else{
-                var rm3WallRepairers = 0;
-            }
-            var roleArray = [['bus', '1']['collectorTwo','1']['farMiner','1']['busTower','1']['upgrader','1']['sweep','1']['labNukeTran','1']['builder','0']['defender', rm3Defs]['claimer', rm3Claimers]['farMinerTwo','2']['conTranTwo','2']['minMiner', rm3MinMiners]['wallRepairer', rm3WallRepairers]]; 
-            currentSpawn.rmMgmt(roleArray);
-        } else if(currentSpawn.room.name == 'W69N39'){
-            if(invFlg6839.memory.hostiles == true || invFlg6938.memory.hostiles == true){
-                var rm4Defs = 0;
-                if(invFlg6839.memory.hostiles == true){
-                    var currentAmountCheck = _.filter(Game.creeps, (creep) => creep.memory.role == 'defender' && creep.memory.target == 'W68N39');
-                    if(currentAmountCheck == undefined){
-                    rm4Defs = rm4Defs + 1;
-                    currentSpawn.memory.exRm1Hostiles = true;
-                    }
-                } else{
-                    currentSpawn.memory.exRm1Hostiles = false;
-                }
-                if(invFlg6938.memory.hostiles == true){
-                    var currentAmountCheck = _.filter(Game.creeps, (creep) => creep.memory.role == 'defender' && creep.memory.target == 'W69N38');
-                    if(currentAmountCheck == undefined){
-                    rm4Defs = rm4Defs + 1;
-                    currentSpawn.memory.exRm2Hostiles = true;
-                    }
-                } else{
-                    currentSpawn.memory.exRm2Hostiles = false;
-                }
-            } else{
-                var rm4Defs = 0;
-            }
-            if(flg1.memory.RES6839 < 2500 || flg1.memory.RES6938 < 2500 || flg1.memory.RES6739 < 2500){
-                var rm4Claimers = 0;
-                if(flg1.memory.RES6839 < 2500){
-                    var currentAmountCheck = _.filter(Game.creeps, (creep) => creep.memory.role == 'claimer' && creep.memory.target == 'W68N39');
-                    if(currentAmountCheck == undefined){
-                    rm4Claimers = rm4Claimers + 1;
-                    currentSpawn.memory.exRm1Claimer = true;
-                    }
-                } else{
-                    currentSpawn.memory.exRm1Claimer = false;
-                }
-                if(flg1.memory.RES6938 < 2500){
-                    var currentAmountCheck = _.filter(Game.creeps, (creep) => creep.memory.role == 'claimer' && creep.memory.target == 'W69N38');
-                    if(currentAmountCheck == undefined){
-                    rm4Claimers = rm4Claimers + 1;
-                    currentSpawn.memory.exRm2Claimer = true;
-                    }
-                } else{
-                    currentSpawn.memory.exRm2Claimer = false;
-                }
-                if(flg1.memory.RES6739 < 2500){
-                    var currentAmountCheck = _.filter(Game.creeps, (creep) => creep.memory.role == 'claimer' && creep.memory.target == 'W67N39');
-                    if(currentAmountCheck == undefined){
-                    rm4Claimers = rm4Claimers + 1;
-                    currentSpawn.memory.exRm3Claimer = true;
-                    }
-                } else{
-                    currentSpawn.memory.exRm3Claimer = false;
-                }
-            } else{
-                var rm4Claimers = 0;
-            }
-            if(min4.ticksToRegeneration == undefined){
-                var currentAmountCheck = _.filter(Game.creeps, (creep) => creep.memory.role == 'minMiner' && creep.memory.home == currentSpawn.room.name);
-                if(currentAmountCheck == undefined){
-                var rm4MinMiners = 1;
-                }
-            } else{
-                var rm4MinMiners = 0;
-            }
-            if(Game.rooms['W69N39'].storage > 800000){
-                var currentAmountCheck = _.filter(Game.creeps, (creep) => creep.memory.role == 'wallRepairer' && creep.memory.target == currentSpawn.room.name);
-                if(currentAmountCheck == undefined){
-                var rm4WallRepairers = 1;
-                }
-            } else{
-                var rm4WallRepairers = 0;
-            }
-            var roleArray = [['bus', '1']['collectorTwo','2']['busTower','1']['upgrader','1']['sweep','1']['labNukeTran','1']['builder','0']['defender', rm4Defs]['claimer', rm4Claimers]['farMinerTwo','5']['conTranTwo','5']['minMiner', rm4MinMiners]['wallRepairer', rm4WallRepairers]]; 
-            currentSpawn.rmMgmt(roleArray);
-        } else if(currentSpawn.room.name == 'W65N37'){
-            if(invFlg6637.memory.hostiles == true || invFlg6538.memory.hostiles == true){
-                var rm5Defs = 0;
-                if(invFlg6637.memory.hostiles == true){
-                    var currentAmountCheck = _.filter(Game.creeps, (creep) => creep.memory.role == 'defender' && creep.memory.target == 'W66N37');
-                    if(currentAmountCheck == undefined){
-                    rm5Defs = rm5Defs + 1;
-                    currentSpawn.memory.exRm1Hostiles = true;
-                    }
-                } else{
-                    currentSpawn.memory.exRm1Hostiles = false;
-                }
-                if(invFlg6538.memory.hostiles == true){
-                    var currentAmountCheck = _.filter(Game.creeps, (creep) => creep.memory.role == 'defender' && creep.memory.target == 'W65N38');
-                    if(currentAmountCheck == undefined){
-                    rm5Defs = rm5Defs + 1;
-                    currentSpawn.memory.exRm2Hostiles = true;
-                    }
-                } else{
-                    currentSpawn.memory.exRm2Hostiles = false;
-                }
-            } else{
-                var rm5Defs = 0;
-            }
-            if(flg1.memory.RES6637 < 2500 || flg1.memory.RES6538 < 2500){
-                var rm5Claimers = 0;
-                if(flg1.memory.RES6637 < 2500){
-                    var currentAmountCheck = _.filter(Game.creeps, (creep) => creep.memory.role == 'claimer' && creep.memory.target == 'W66N37');
-                    if(currentAmountCheck == undefined){
-                    rm5Claimers = rm5Claimers + 1;
-                    currentSpawn.memory.exRm1Claimer = true;
-                    }
-                } else{
-                    currentSpawn.memory.exRm1Claimer = false;
-                }
-                if(flg1.memory.RES6538 < 2500){
-                    var currentAmountCheck = _.filter(Game.creeps, (creep) => creep.memory.role == 'claimer' && creep.memory.target == 'W65N38');
-                    if(currentAmountCheck == undefined){
-                    rm5Claimers = rm5Claimers + 1;
-                    currentSpawn.memory.exRm2Claimer = true;
-                    }
-                } else{
-                    currentSpawn.memory.exRm2Claimer = false;
-                }
-            } else{
-                var rm5Claimers = 0;
-            }
-            if(min5.ticksToRegeneration == undefined){
-                var currentAmountCheck = _.filter(Game.creeps, (creep) => creep.memory.role == 'minMiner' && creep.memory.home == currentSpawn.room.name);
-                if(currentAmountCheck == undefined){
-                var rm5MinMiners = 1;
-                }
-            } else{
-                var rm5MinMiners = 0;
-            }
-            if(Game.rooms['W65N37'].storage > 950000){
-                var currentAmountCheck = _.filter(Game.creeps, (creep) => creep.memory.role == 'wallRepairer' && creep.memory.target == currentSpawn.room.name);
-                if(currentAmountCheck == undefined){
-                var rm5WallRepairers = 1;
-                }
-            } else{
-                var rm5WallRepairers = 0;
-            }
-            var roleArray = [['bus', '1']['farMiner','1']['busTower','1']['upgrader','1']['sweep','1']['labNukeTran','1']['builder','0']['defender', rm5Defs]['claimer', rm5Claimers]['farMinerTwo','5']['conTranTwo','5']['minMiner', rm5MinMiners]['wallRepairer', rm5WallRepairers]]; 
-            currentSpawn.rmMgmt(roleArray);
-        } else if(currentSpawn.room.name == 'W73N36'){
-            if(invFlg7335.memory.hostiles == true || invFlg7337.memory.hostiles == true){
-                var rm6Defs = 0;
-                if(invFlg7335.memory.hostiles == true){
-                    var currentAmountCheck = _.filter(Game.creeps, (creep) => creep.memory.role == 'defender' && creep.memory.target == 'W73N35');
-                    if(currentAmountCheck == undefined){
-                    rm6Defs = rm6Defs + 1;
-                    currentSpawn.memory.exRm1Hostiles = true;
-                    }
-                } else{
-                    currentSpawn.memory.exRm1Hostiles = false;
-                }
-                if(invFlg7337.memory.hostiles == true){
-                    var currentAmountCheck = _.filter(Game.creeps, (creep) => creep.memory.role == 'defender' && creep.memory.target == 'W73N37');
-                    if(currentAmountCheck == undefined){
-                    rm6Defs = rm6Defs + 1;
-                    currentSpawn.memory.exRm2Hostiles = true;
-                    }
-                } else{
-                    currentSpawn.memory.exRm2Hostiles = false;
-                }
-            } else{
-                var rm6Defs = 0;
-            }
-            if(flg1.memory.RES7335 < 2500 || flg1.memory.RES7337 < 2500){
-                var rm6Claimers = 0;
-                if(flg1.memory.RES7335 < 2500){
-                    var currentAmountCheck = _.filter(Game.creeps, (creep) => creep.memory.role == 'claimer' && creep.memory.target == 'W73N35');
-                    if(currentAmountCheck == undefined){
-                    rm6Claimers = rm6Claimers + 1;
-                    currentSpawn.memory.exRm1Claimer = true;
-                    }
-                } else{
-                    currentSpawn.memory.exRm1Claimer = false;
-                }
-                if(flg1.memory.RES7337 < 2500){
-                    var currentAmountCheck = _.filter(Game.creeps, (creep) => creep.memory.role == 'claimer' && creep.memory.target == 'W73N37');
-                    if(currentAmountCheck == undefined){
-                    rm6Claimers = rm6Claimers + 1;
-                    currentSpawn.memory.exRm2Claimer = true;
-                    }
-                } else{
-                    currentSpawn.memory.exRm2Claimer = false;
-                }
-            } else{
-                var rm6Claimers = 0;
-            }
-            if(min6.ticksToRegeneration == undefined){
-                var currentAmountCheck = _.filter(Game.creeps, (creep) => creep.memory.role == 'minMiner' && creep.memory.home == currentSpawn.room.name);
-                if(currentAmountCheck == undefined){
-                var rm6MinMiners = 1;
-                }
-            } else{
-                var rm6MinMiners = 0;
-            }
-            if(Game.rooms['W73N36'].storage > 950000){
-                var currentAmountCheck = _.filter(Game.creeps, (creep) => creep.memory.role == 'wallRepairer' && creep.memory.target == currentSpawn.room.name);
-                if(currentAmountCheck == undefined){
-                var rm6WallRepairers = 1;
-                }
-            } else{
-                var rm6WallRepairers = 0;
-            }
-            var roleArray = [['bus', '1']['collectorTwo','2']['busTower','1']['upgrader','1']['labNukeTran','1']['builder','0']['defender', rm6Defs]['claimer', rm6Claimers]['farMinerTwo','3']['conTranTwo','3']['minMiner', rm6MinMiners]['wallRepairer', rm6WallRepairers]]; 
-            currentSpawn.rmMgmt(roleArray);
-        } else if(currentSpawn.room.name == 'W53N38'){
-            if(invFlg5438.memory.hostiles == true){
-                var rm7Defs = 0;
-                if(invFlg5438.memory.hostiles == true){
-                    var currentAmountCheck = _.filter(Game.creeps, (creep) => creep.memory.role == 'defender' && creep.memory.target == 'W54N38');
-                    if(currentAmountCheck == undefined){
-                    rm7Defs = rm7Defs + 1;
-                    currentSpawn.memory.exRm1Hostiles = true;
-                    }
-                } else{
-                    currentSpawn.memory.exRm1Hostiles = false;
-                }
-            } else{
-                var rm7Defs = 0;
-            }
-            if(flg1.memory.RES5438 < 2500){
-                var rm7Claimers = 0;
-                if(flg1.memory.RES5438 < 2500){
-                    var currentAmountCheck = _.filter(Game.creeps, (creep) => creep.memory.role == 'claimer' && creep.memory.target == 'W54N38');
-                    if(currentAmountCheck == undefined){
-                    rm7Claimers = rm7Claimers + 1;
-                    currentSpawn.memory.exRm1Claimer = true;
-                    }
-                } else{
-                    currentSpawn.memory.exRm1Claimer = false;
-                }
-            } else{
-                var rm7Claimers = 0;
-            }
-            if(min7.ticksToRegeneration == undefined){
-                var currentAmountCheck = _.filter(Game.creeps, (creep) => creep.memory.role == 'minMiner' && creep.memory.home == currentSpawn.room.name);
-                if(currentAmountCheck == undefined){
-                var rm7MinMiners = 1;
-                }
-            } else{
-                var rm7MinMiners = 0;
-            }
-            if(Game.rooms['W53N38'].storage > 950000){
-                var currentAmountCheck = _.filter(Game.creeps, (creep) => creep.memory.role == 'wallRepairer' && creep.memory.target == currentSpawn.room.name);
-                if(currentAmountCheck == undefined){
-                var rm7WallRepairers = 1;
-                }
-            } else{
-                var rm7WallRepairers = 0;
-            }
-            var roleArray = [['bus', '1']['farMinerTwo','2']['busTower','1']['upgrader','1']['sweep','1']['labNukeTran','1']['builder','1']['defender', rm7Defs]['claimer', rm7Claimers]['farMinerTwo','2']['conTranTwo','2']['minMiner', rm7MinMiners]['wallRepairer', rm7WallRepairers]]; 
-            currentSpawn.rmMgmt(roleArray);
-        }
-    }
-    var allSpawnCooldown = _.filter(Game.spawns, (s) => s.spawnMemSaver != 0);
-    for(let currentSpawnTgt of allSpawnCooldown){
-        currentSpawnTgt.spawnMemSaver = (currentSpawnTgt.spawnMemSaver - 1);
-    }
-    */
-
-    
     // Declare Flags 
     flg1 = Game.flags.Flag1RM1;
     invFlg7335 = Game.flags.INVRM7335;
@@ -561,8 +54,711 @@ module.exports.loop = function () {
     invFlg7337 = Game.flags.INVRM7337;
     invFlg5337 = Game.flags.INVRM5337;
     invFlg5437 = Game.flags.INVRM5437;
+    invFlg6933 = Game.flags.INVRM6933;
+    invFlg7732 = Game.flags.INVRM6933;
     
     flg1.resvMgmt();
+    
+    
+    
+    
+    // Remove Extra Creep names (less Memory as a non loop?)
+    for(var name in Memory.creeps) {
+        if(!Game.creeps[name]) {
+            delete Memory.creeps[name];
+        }
+    }
+    // Tower Logic 
+    var towers = _.filter(Game.structures, s => s.structureType == STRUCTURE_TOWER && s.energy > 0);
+    for(let tower of towers) {
+        tower.defend();
+    }
+    // Link logic
+    var links = _.filter(Game.structures, s => s.structureType == STRUCTURE_LINK && s.cooldown == 0 && s.energy > 200 != s.pos.inRangeTo(s.room.storage, 3) == true != s.pos.inRangeTo(s.room.controller, 4) == true);
+    for(let link of links){
+        link.linkLogic();
+    }
+    
+    var obs7 = Game.getObjectById('59ecdc4bdcf9c40e1eb02056');
+    obs7.observeRoom('W54N37');
+    
+        //Mineral declerations
+    var min1 = Game.getObjectById('57efa006195b160f02c74e5a');
+    var min2 = Game.getObjectById('57efa006195b160f02c74e59');   
+    var min3 = Game.getObjectById('579fab82b1f02a3b0cfefe36');
+    var min4 = Game.getObjectById('57efa003195b160f02c74b65');
+    var min5 = Game.getObjectById('57efa005195b160f02c74d2c');    
+    var min6 = Game.getObjectById('5836baa6090e0ab576fdd089');   
+    var min7 = Game.getObjectById('579fab83b1f02a3b0cfeff79');
+    /*
+    var testMemSaveSpawns = _.filter(Game.spawns, (s) => s.memory.spawnMemSaver != 0);
+    for(let savingSpawn of testMemSaveSpawns){
+        if(savingSpawn.memory.spawnMemSaver < 0){
+            savingSpawn.memory.spawnMemSaver = 0;
+        }else{
+            savingSpawn.memory.spawnMemSaver = (savingSpawn.memory.spawnMemSaver - 1);
+        }
+    }
+    
+    var testSpawn = _.filter(Game.spawns, (s) => s.spawning == null && s.room.controller.level != 8 && s.memory.spawnMemSaver == 0)
+    if(testSpawn.length > 0){
+        for(let currentSpawn of testSpawn){
+    if(currentSpawn.room.name == 'W68N33'){
+            if(invFlg6933.memory.hostiles == true){
+                var currentAmountCheck = _.filter(Game.creeps, (creep) => creep.memory.role == 'defender' && creep.memory.target == 'W69N33');
+                if(currentAmountCheck[0] == undefined){
+                    var rm1Defs = 1;
+                    currentSpawn.memory.exRm1Hostiles = true; 
+                }
+            } else{
+                var rm1Defs = 0;
+                currentSpawn.memory.exRm1Hostiles = false;
+            }
+            if(flg1.memory.RES6933 < 2500){
+                var currentAmountCheck = _.filter(Game.creeps, (creep) => creep.memory.role == 'claimer' && creep.memory.target == 'W69N33');
+                if(currentAmountCheck[0] == undefined){
+                    var rm1Claimers = 1;
+                    currentSpawn.memory.exRm1Claimer = true;
+                }
+                
+            } else{
+                currentSpawn.memory.exRm1Claimer = false;
+            }
+            var roleArray = [['bus', '1'],['collectorTwo','2'],['busTower','1'],['upgrader','1'],['sweep','1'],['labNukeTran','1'],['builder','0'],['defender', rm1Defs],['claimer',rm1Claimers],['farBuilder','0'],['farMinerTwo','2'],['conTranTwo','2']]; 
+            currentSpawn.rmMgmt(roleArray);
+        } else if(currentSpawn.room.name == 'W76N32'){
+            if(invFlg7732.memory.hostiles == true){
+                var currentAmountCheck = _.filter(Game.creeps, (creep) => creep.memory.role == 'defender' && creep.memory.target == 'W77N32');
+                if(currentAmountCheck[0] == undefined){
+                    var rm1Defs = 1;
+                    currentSpawn.memory.exRm1Hostiles = true; 
+                }
+            } else{
+                var rm1Defs = 0;
+                currentSpawn.memory.exRm1Hostiles = false;
+            }
+            if(flg1.memory.RES7732 < 2500){
+                var currentAmountCheck = _.filter(Game.creeps, (creep) => creep.memory.role == 'claimer' && creep.memory.target == 'W77N32');
+                if(currentAmountCheck[0] == undefined){
+                    var rm1Claimers = 1;
+                    currentSpawn.memory.exRm1Claimer = true;
+                }
+                
+            } else{
+                currentSpawn.memory.exRm1Claimer = false;
+            }
+            var roleArray = [['bus', '1'],['collectorTwo','2'],['busTower','1'],['upgrader','1'],['sweep','1'],['labNukeTran','1'],['builder','0'],['defender', rm1Defs],['claimer',rm1Claimers],['farBuilder','0'],['farMinerTwo','2'],['conTranTwo','2']]; 
+            currentSpawn.rmMgmt(roleArray);
+        }
+    }  
+    }
+    */
+
+
+    
+    // For CyberTron!
+    
+    var allSpawn = _.filter(Game.spawns, (s) => s.spawning == null && s.room.energyAvailable > 299 && s.memory.spawnMemSaver == 0);
+    
+    console.log('AllSpawn Length: ' + allSpawn.length)
+    if(allSpawn.length > 0){
+    for(let currentSpawn of allSpawn){
+        if(currentSpawn.room.name == 'W62N38'){
+            if(invFlg6237.memory.hostiles == true){
+                var currentAmountCheck = _.filter(Game.creeps, (creep) => creep.memory.role == 'defender' && creep.memory.target == 'W62N37');
+                if(currentAmountCheck[0] == undefined){
+                    var rm1Defs = 1;
+                    currentSpawn.memory.exRm1Hostiles = true; 
+                }
+            } else{
+                var rm1Defs = 0;
+                currentSpawn.memory.exRm1Hostiles = false;
+            }
+            if(flg1.memory.RES6237 < 2500){
+                var currentAmountCheck = _.filter(Game.creeps, (creep) => creep.memory.role == 'claimer' && creep.memory.target == 'W62N37');
+                if(currentAmountCheck[0] == undefined){
+                    var rm1Claimers = 1;
+                    currentSpawn.memory.exRm1Claimer = true;
+                } else{
+                var rm1Claimers = 0;
+                currentSpawn.memory.exRm1Claimer = false;
+            }
+                
+            } else{
+                currentSpawn.memory.exRm1Claimer = false;
+            }
+            if(min1.ticksToRegeneration == undefined){
+                var currentAmountCheck = _.filter(Game.creeps, (creep) => creep.memory.role == 'minMiner' && creep.memory.home == currentSpawn.room.name);
+                if(currentAmountCheck[0] == undefined){
+                    var rm1MinMiners = 1;
+                    currentSpawn.memory.rmMin = true;
+                }
+            } else{
+                var rm1MinMiners = 0;
+                currentSpawn.memory.rmMin = false;
+            }
+            if(Game.rooms['W62N38'].storage > 800000){
+                var currentAmountCheck = _.filter(Game.creeps, (creep) => creep.memory.role == 'wallRepairer' && creep.memory.target == currentSpawn.room.name);
+                if(currentAmountCheck[0] == undefined){
+                    var rm1WallRepairers = 1;
+                }
+            } else{
+                var rm1WallRepairers = 0;
+            }
+            var roleArray = [['bus', '1'],['collectorTwo','2'],['busTower','1'],['upgrader','1'],['linker','1'],['labNukeTran','1'],['builder','0'],['defender', rm1Defs],['claimer', rm1Claimers],['farMinerTwo','2'],['conTranTwo','2'],['minMiner', rm1MinMiners],['wallRepairer', '0']]; 
+            currentSpawn.rmMgmt(roleArray);
+        } else if(currentSpawn.room.name == 'W62N39'){
+            if(invFlg6338.memory.hostiles == true || invFlg6339.memory.hostiles == true){
+                var rm2Defs = 0;
+                if(invFlg6338.memory.hostiles == true){
+                    var currentAmountCheck = _.filter(Game.creeps, (creep) => creep.memory.role == 'defender' && creep.memory.target == 'W63N38');
+                    if(currentAmountCheck[0] == undefined){
+                        rm2Defs = rm2Defs + 1;
+                        currentSpawn.memory.exRm1Hostiles = true;
+                    }
+                } else{
+                    currentSpawn.memory.exRm1Hostiles = false;
+                }
+                if(invFlg6339.memory.hostiles == true){
+                    var currentAmountCheck = _.filter(Game.creeps, (creep) => creep.memory.role == 'defender' && creep.memory.target == 'W63N39');
+                    if(currentAmountCheck[0] == undefined){
+                        rm2Defs = rm2Defs + 1;
+                        currentSpawn.memory.exRm2Hostiles = true;
+                    }
+                } else{
+                    currentSpawn.memory.exRm2Hostiles = false;
+                }
+            }
+            if(flg1.memory.RES6339 < 2500 || flg1.memory.RES6338 < 3000){
+                var rm2Claimers = 0;
+                if(flg1.memory.RES6338 < 2500){
+                    var currentAmountCheck = _.filter(Game.creeps, (creep) => creep.memory.role == 'claimer' && creep.memory.target == 'W63N38');
+                    if(currentAmountCheck[0] == undefined){
+                        rm2Claimers = rm2Claimers + 1;
+                        currentSpawn.memory.exRm1Claimer = true;
+                    } else{
+                    currentSpawn.memory.exRm1Claimer = false;
+                }
+                } else{
+                    currentSpawn.memory.exRm1Claimer = false;
+                }
+                if(flg1.memory.RES6339 < 2500){
+                    var currentAmountCheck = _.filter(Game.creeps, (creep) => creep.memory.role == 'claimer' && creep.memory.target == 'W62N37');
+                    if(currentAmountCheck[0] == undefined){
+                        rm2Claimers = rm2Claimers + 1;
+                        currentSpawn.memory.exRm2Claimer = true;
+                    } else{
+                    currentSpawn.memory.exRm2Claimer = false;
+                }
+                } else{
+                    currentSpawn.memory.exRm2Claimer = false;
+                }
+            }
+            if(min2.ticksToRegeneration == undefined){
+                var currentAmountCheck = _.filter(Game.creeps, (creep) => creep.memory.role == 'minMiner' && creep.memory.home == currentSpawn.room.name);
+                if(currentAmountCheck[0] == undefined){
+                    var rm2MinMiners = 1;
+                }
+            } else{
+                var rm2MinMiners = 0;
+            }
+            if(Game.rooms['W62N39'].storage > 800000){
+                var currentAmountCheck = _.filter(Game.creeps, (creep) => creep.memory.role == 'wallRepairer' && creep.memory.target == currentSpawn.room.name);
+                if(currentAmountCheck[0] == undefined){
+                    var rm2WallRepairers = 1;
+                }
+            } else{
+                var rm2WallRepairers = 0;
+            }
+            var roleArray = [['bus', '1'],['collectorTwo','2'],['busTower','1'],['upgrader','1'],['sweep','1'],['labNukeTran','1'],['builder','0'],['defender', rm2Defs],['claimer', rm2Claimers],['farMinerTwo','2'],['conTranTwo','2'],['minMiner', rm2MinMiners],['wallRepairer', '0']]; 
+            currentSpawn.rmMgmt(roleArray);
+        } else if(currentSpawn.room.name == 'W57N37'){
+            if(invFlg5736.memory.hostiles == true || invFlg5738.memory.hostiles == true || invFlg5637.memory.hostiles == true || invFlg5837.memory.hostiles == true || invFlg5638.memory.hostiles == true){
+                var rm3Defs = 0;
+                if(invFlg5736.memory.hostiles == true){
+                    var currentAmountCheck = _.filter(Game.creeps, (creep) => creep.memory.role == 'defender' && creep.memory.target == 'W57N36');
+                    if(currentAmountCheck[0] == undefined){
+                    currentSpawn.memory.exRm1Hostiles = true;
+                    rm3Defs = rm3Defs + 1
+                    }
+                } else{
+                    currentSpawn.memory.exRm1Hostiles = false;
+                }
+                if(invFlg5738.memory.hostiles == true){
+                    var currentAmountCheck = _.filter(Game.creeps, (creep) => creep.memory.role == 'defender' && creep.memory.target == 'W57N38');
+                    if(currentAmountCheck[0] == undefined){
+                    currentSpawn.memory.exRm2Hostiles = true;
+                    rm3Defs = rm3Defs + 1;
+                    }
+                } else{
+                    currentSpawn.memory.exRm2Hostiles = false;
+                }
+                if(invFlg5637.memory.hostiles == true){
+                    var currentAmountCheck = _.filter(Game.creeps, (creep) => creep.memory.role == 'defender' && creep.memory.target == 'W56N37');
+                    if(currentAmountCheck[0] == undefined){
+                    currentSpawn.memory.exRm3Hostiles = true;
+                    rm3Defs = rm3Defs + 1;
+                    }
+                } else{
+                    currentSpawn.memory.exRm3Hostiles = false;
+                }
+                if(invFlg5837.memory.hostiles == true){
+                    var currentAmountCheck = _.filter(Game.creeps, (creep) => creep.memory.role == 'defender' && creep.memory.target == 'W58N37');
+                    if(currentAmountCheck[0] == undefined){
+                    currentSpawn.memory.exRm4Hostiles = true;
+                    rm3Defs = rm3Defs + 1;
+                    }
+                } else{
+                    currentSpawn.memory.exRm4Hostiles = false;
+                }
+                if(invFlg5638.memory.hostiles == true){
+                    var currentAmountCheck = _.filter(Game.creeps, (creep) => creep.memory.role == 'defender' && creep.memory.target == 'W56N38');
+                    if(currentAmountCheck[0] == undefined){
+                    currentSpawn.memory.exRm5Hostiles = true;
+                    rm3Defs = rm3Defs + 1;
+                    }
+                } else{
+                    currentSpawn.memory.exRm5Hostiles = false;
+                }
+            } else{
+                var rm3Defs = 0;
+            }
+            if(flg1.memory.RES5736 < 2500 || flg1.memory.RES5738 < 2500 || flg1.memory.RES5637 < 2500 || flg1.memory.RE5837 < 2500 || flg1.memory.RES5638 < 2500){
+                var rm3Claimers = 0;
+                if(flg1.memory.RES5736 < 2500){
+                    var currentAmountCheck = _.filter(Game.creeps, (creep) => creep.memory.role == 'claimer' && creep.memory.target == 'W57N36');
+                    if(currentAmountCheck[0] == undefined){
+                        rm3Claimers = rm3Claimers + 1;
+                        currentSpawn.memory.exRm1Claimer = true;
+                    } else{
+                    currentSpawn.memory.exRm1Claimer = false;
+                }
+                } else{
+                    currentSpawn.memory.exRm1Claimer = false;
+                }
+                if(flg1.memory.RES5738 < 2500){
+                    var currentAmountCheck = _.filter(Game.creeps, (creep) => creep.memory.role == 'claimer' && creep.memory.target == 'W57N38');
+                    if(currentAmountCheck[0] == undefined){
+                        rm3Claimers = rm3Claimers + 1;
+                        currentSpawn.memory.exRm4Claimer = true;
+                    } else{
+                    currentSpawn.memory.exRm4Claimer = false;
+                }
+                } else{
+                    currentSpawn.memory.exRm4Claimer = false;
+                }
+                if(flg1.memory.RES5637 < 2500){
+                    var currentAmountCheck = _.filter(Game.creeps, (creep) => creep.memory.role == 'claimer' && creep.memory.target == 'W56N37');
+                    if(currentAmountCheck[0] == undefined){
+                    rm3Claimers = rm3Claimers + 1;
+                    currentSpawn.memory.exRm3Claimer = true;
+                    } else{
+                    currentSpawn.memory.exRm3Claimer = false;
+                }
+                } else{
+                    currentSpawn.memory.exRm3Claimer = false;
+                }
+                if(flg1.memory.RES5837 < 2500){
+                    var currentAmountCheck = _.filter(Game.creeps, (creep) => creep.memory.role == 'claimer' && creep.memory.target == 'W58N37');
+                    if(currentAmountCheck[0] == undefined){
+                    rm3Claimers = rm3Claimers + 1;
+                    currentSpawn.memory.exRm2Claimer = true;
+                    } else{
+                    currentSpawn.memory.exRm2Claimer = false;
+                }
+                } else{
+                    currentSpawn.memory.exRm2Claimer = false;
+                }
+                if(flg1.memory.RES5638 < 2500){
+                    var currentAmountCheck = _.filter(Game.creeps, (creep) => creep.memory.role == 'claimer' && creep.memory.target == 'W56N38');
+                    if(currentAmountCheck[0] == undefined){
+                    rm3Claimers = rm3Claimers + 1;
+                    currentSpawn.memory.exRm5Claimer = true;
+                    } else{
+                    currentSpawn.memory.exRm5Claimer = false;
+                }
+                } else{
+                    currentSpawn.memory.exRm5Claimer = false;
+                }
+            } else{
+                var rm3Claimers = 0;
+            }
+            if(min3.ticksToRegeneration == undefined){
+                var currentAmountCheck = _.filter(Game.creeps, (creep) => creep.memory.role == 'minMiner' && creep.memory.home == currentSpawn.room.name);
+                if(currentAmountCheck[0] == undefined){
+                var rm3MinMiners = 1;
+                }
+            } else{
+                var rm3MinMiners = 0;
+            }
+            if(Game.rooms['W57N37'].storage > 800000){
+                var currentAmountCheck = _.filter(Game.creeps, (creep) => creep.memory.role == 'wallRepairer' && creep.memory.target == currentSpawn.room.name);
+                if(currentAmountCheck[0] == undefined){
+                var rm3WallRepairers = 1;
+                }
+            } else{
+                var rm3WallRepairers = 0;
+            }
+            var roleArray = [['bus', '1'],['collectorTwo','2'],['busTower','1'],['upgrader','1'],['sweep','1'],['labNukeTran','1'],['builder','0'],['defender', rm3Defs],['claimer', rm3Claimers],['farMinerTwo','7'],['conTranTwo','7'],['minMiner', rm3MinMiners],['wallRepairer', '0']]; 
+            currentSpawn.rmMgmt(roleArray);
+        } else if(currentSpawn.room.name == 'W69N39'){
+            if(invFlg6839.memory.hostiles == true || invFlg6938.memory.hostiles == true){
+                var rm4Defs = 0;
+                if(invFlg6839.memory.hostiles == true){
+                    var currentAmountCheck = _.filter(Game.creeps, (creep) => creep.memory.role == 'defender' && creep.memory.target == 'W68N39');
+                    if(currentAmountCheck[0] == undefined){
+                    rm4Defs = rm4Defs + 1;
+                    currentSpawn.memory.exRm2Hostiles = true;
+                    }
+                } else{
+                    currentSpawn.memory.exRm2Hostiles = false;
+                }
+                if(invFlg6938.memory.hostiles == true){
+                    var currentAmountCheck = _.filter(Game.creeps, (creep) => creep.memory.role == 'defender' && creep.memory.target == 'W69N38');
+                    if(currentAmountCheck[0] == undefined){
+                    rm4Defs = rm4Defs + 1;
+                    currentSpawn.memory.exRm1Hostiles = true;
+                    }
+                } else{
+                    currentSpawn.memory.exRm1Hostiles = false;
+                }
+            } else{
+                var rm4Defs = 0;
+            }
+            if(flg1.memory.RES6839 < 2500 || flg1.memory.RES6938 < 2500 || flg1.memory.RES6739 < 2500){
+                var rm4Claimers = 0;
+                if(flg1.memory.RES6839 < 2500){
+                    var currentAmountCheck = _.filter(Game.creeps, (creep) => creep.memory.role == 'claimer' && creep.memory.target == 'W68N39');
+                    if(currentAmountCheck[0] == undefined){
+                    rm4Claimers = rm4Claimers + 1;
+                    currentSpawn.memory.exRm2Claimer = true;
+                    } else{
+                    currentSpawn.memory.exRm2Claimer = false;
+                }
+                } else{
+                    currentSpawn.memory.exRm2Claimer = false;
+                }
+                if(flg1.memory.RES6938 < 2500){
+                    var currentAmountCheck = _.filter(Game.creeps, (creep) => creep.memory.role == 'claimer' && creep.memory.target == 'W69N38');
+                    if(currentAmountCheck[0] == undefined){
+                    rm4Claimers = rm4Claimers + 1;
+                    currentSpawn.memory.exRm1Claimer = true;
+                    } else{
+                    currentSpawn.memory.exRm1Claimer = false;
+                }
+                } else{
+                    currentSpawn.memory.exRm1Claimer = false;
+                }
+                if(flg1.memory.RES6739 < 2500){
+                    var currentAmountCheck = _.filter(Game.creeps, (creep) => creep.memory.role == 'claimer' && creep.memory.target == 'W67N39');
+                    if(currentAmountCheck[0] == undefined){
+                    rm4Claimers = rm4Claimers + 1;
+                    currentSpawn.memory.exRm3Claimer = true;
+                    } else{
+                    currentSpawn.memory.exRm3Claimer = false;
+                }
+                } else{
+                    currentSpawn.memory.exRm3Claimer = false;
+                }
+            } else{
+                var rm4Claimers = 0;
+            }
+            if(min4.ticksToRegeneration == undefined){
+                var currentAmountCheck = _.filter(Game.creeps, (creep) => creep.memory.role == 'minMiner' && creep.memory.home == currentSpawn.room.name);
+                if(currentAmountCheck[0] == undefined){
+                var rm4MinMiners = 1;
+                }
+            } else{
+                var rm4MinMiners = 0;
+            }
+            if(Game.rooms['W69N39'].storage > 800000){
+                var currentAmountCheck = _.filter(Game.creeps, (creep) => creep.memory.role == 'wallRepairer' && creep.memory.target == currentSpawn.room.name);
+                if(currentAmountCheck[0] == undefined){
+                var rm4WallRepairers = 1;
+                }
+            } else{
+                var rm4WallRepairers = 0;
+            }
+            var roleArray = [['bus', '1'],['collectorTwo','2'],['busTower','1'],['upgrader','1'],['sweep','1'],['labNukeTran','1'],['builder','0'],['defender', rm4Defs],['claimer', rm4Claimers],['farMinerTwo','5'],['conTranTwo','5'],['minMiner', rm4MinMiners],['farBuilder','2'],['farUpgrader','0'],['wallRepairer', '0']]; 
+            currentSpawn.rmMgmt(roleArray);
+        } else if(currentSpawn.room.name == 'W65N37'){
+            if(invFlg6637.memory.hostiles == true || invFlg6538.memory.hostiles == true){
+                var rm5Defs = 0;
+                if(invFlg6637.memory.hostiles == true){
+                    var currentAmountCheck = _.filter(Game.creeps, (creep) => creep.memory.role == 'defender' && creep.memory.target == 'W66N37');
+                    if(currentAmountCheck[0] == undefined){
+                    rm5Defs = rm5Defs + 1;
+                    currentSpawn.memory.exRm1Hostiles = true;
+                    }
+                } else{
+                    currentSpawn.memory.exRm1Hostiles = false;
+                }
+                if(invFlg6538.memory.hostiles == true){
+                    var currentAmountCheck = _.filter(Game.creeps, (creep) => creep.memory.role == 'defender' && creep.memory.target == 'W65N38');
+                    if(currentAmountCheck[0] == undefined){
+                    rm5Defs = rm5Defs + 1;
+                    currentSpawn.memory.exRm2Hostiles = true;
+                    }
+                } else{
+                    currentSpawn.memory.exRm2Hostiles = false;
+                }
+            } else{
+                var rm5Defs = 0;
+            }
+            if(flg1.memory.RES6637 < 2500 || flg1.memory.RES6538 < 2500){
+                var rm5Claimers = 0;
+                if(flg1.memory.RES6637 < 2500){
+                    var currentAmountCheck = _.filter(Game.creeps, (creep) => creep.memory.role == 'claimer' && creep.memory.target == 'W66N37');
+                    if(currentAmountCheck[0] == undefined){
+                    rm5Claimers = rm5Claimers + 1;
+                    currentSpawn.memory.exRm1Claimer = true;
+                    } else{
+                    currentSpawn.memory.exRm1Claimer = false;
+                }
+                } else{
+                    currentSpawn.memory.exRm1Claimer = false;
+                }
+                if(flg1.memory.RES6538 < 2500){
+                    var currentAmountCheck = _.filter(Game.creeps, (creep) => creep.memory.role == 'claimer' && creep.memory.target == 'W65N38');
+                    if(currentAmountCheck[0] == undefined){
+                    rm5Claimers = rm5Claimers + 1;
+                    currentSpawn.memory.exRm2Claimer = true;
+                    } else{
+                    currentSpawn.memory.exRm2Claimer = false;
+                }
+                }else{
+                    currentSpawn.memory.exRm2Claimer = false;
+                }
+            } else{
+                var rm5Claimers = 0;
+            }
+            if(min5.ticksToRegeneration == undefined){
+                var currentAmountCheck = _.filter(Game.creeps, (creep) => creep.memory.role == 'minMiner' && creep.memory.home == currentSpawn.room.name);
+                if(currentAmountCheck[0] == undefined){
+                var rm5MinMiners = 1;
+                }
+            } else{
+                var rm5MinMiners = 0;
+            }
+            if(Game.rooms['W65N37'].storage > 950000){
+                var currentAmountCheck = _.filter(Game.creeps, (creep) => creep.memory.role == 'wallRepairer' && creep.memory.target == currentSpawn.room.name);
+                if(currentAmountCheck[0] == undefined){
+                var rm5WallRepairers = 1;
+                }
+            } else{
+                var rm5WallRepairers = 0;
+            }
+            var roleArray = [['bus', '1'],['collectorTwo','1'],['busTower','1'],['upgrader','1'],['sweep','1'],['labNukeTran','1'],['builder','0'],['defender', rm5Defs],['claimer', rm5Claimers],['farMinerTwo','5'],['conTranTwo','5'],['minMiner', rm5MinMiners],['wallRepairer', '0']]; 
+            currentSpawn.rmMgmt(roleArray);
+        } else if(currentSpawn.room.name == 'W73N36'){
+            if(invFlg7335.memory.hostiles == true || invFlg7337.memory.hostiles == true){
+                var rm6Defs = 0;
+                if(invFlg7335.memory.hostiles == true){
+                    var currentAmountCheck = _.filter(Game.creeps, (creep) => creep.memory.role == 'defender' && creep.memory.target == 'W73N35');
+                    if(currentAmountCheck[0] == undefined){
+                    rm6Defs = rm6Defs + 1;
+                    currentSpawn.memory.exRm1Hostiles = true;
+                    }
+                } else{
+                    currentSpawn.memory.exRm1Hostiles = false;
+                }
+                if(invFlg7337.memory.hostiles == true){
+                    var currentAmountCheck = _.filter(Game.creeps, (creep) => creep.memory.role == 'defender' && creep.memory.target == 'W73N37');
+                    if(currentAmountCheck[0] == undefined){
+                    rm6Defs = rm6Defs + 1;
+                    currentSpawn.memory.exRm2Hostiles = true;
+                    }
+                } else{
+                    currentSpawn.memory.exRm2Hostiles = false;
+                }
+            } else{
+                var rm6Defs = 0;
+            }
+            if(flg1.memory.RES7335 < 2500 || flg1.memory.RES7337 < 2500){
+                var rm6Claimers = 0;
+                if(flg1.memory.RES7335 < 2500){
+                    var currentAmountCheck = _.filter(Game.creeps, (creep) => creep.memory.role == 'claimer' && creep.memory.target == 'W73N35');
+                    if(currentAmountCheck[0] == undefined){
+                    rm6Claimers = rm6Claimers + 1;
+                    currentSpawn.memory.exRm1Claimer = true;
+                    } else{
+                    currentSpawn.memory.exRm1Claimer = false;
+                }
+                }
+                if(flg1.memory.RES7337 < 2500){
+                    var currentAmountCheck = _.filter(Game.creeps, (creep) => creep.memory.role == 'claimer' && creep.memory.target == 'W73N37');
+                    if(currentAmountCheck[0] == undefined){
+                    rm6Claimers = rm6Claimers + 1;
+                    currentSpawn.memory.exRm2Claimer = true;
+                    } else{
+                    currentSpawn.memory.exRm2Claimer = false;
+                }
+                }
+            } else{
+                var rm6Claimers = 0;
+            }
+            if(min6.ticksToRegeneration == undefined){
+                var currentAmountCheck = _.filter(Game.creeps, (creep) => creep.memory.role == 'minMiner' && creep.memory.home == currentSpawn.room.name);
+                if(currentAmountCheck[0] == undefined){
+                var rm6MinMiners = 1;
+                }
+            } else{
+                var rm6MinMiners = 0;
+            }
+            if(Game.rooms['W73N36'].storage > 950000){
+                var currentAmountCheck = _.filter(Game.creeps, (creep) => creep.memory.role == 'wallRepairer' && creep.memory.target == currentSpawn.room.name);
+                if(currentAmountCheck[0] == undefined){
+                var rm6WallRepairers = 1;
+                }
+            } else{
+                var rm6WallRepairers = 0;
+            }
+            var roleArray = [['bus', '1'],['collectorTwo','2'],['busTower','1'],['upgrader','1'],['labNukeTran','1'],['builder','0'],['linker','1'],['defender', rm6Defs],['claimer', rm6Claimers],['farMinerTwo','3'],['conTranTwo','3'],['minMiner', rm6MinMiners],['wallRepairer', '0']]; 
+            currentSpawn.rmMgmt(roleArray);
+        } else if(currentSpawn.room.name == 'W53N38'){
+            if(invFlg5438.memory.hostiles == true || invFlg5437.memory.hostiles == true || invFlg5337.memory.hostiles == true){
+                var rm7Defs = 0;
+                if(invFlg5438.memory.hostiles == true){
+                    var currentAmountCheck = _.filter(Game.creeps, (creep) => creep.memory.role == 'defender' && creep.memory.target == 'W54N38');
+                    if(currentAmountCheck[0] == undefined){
+                    rm7Defs = rm7Defs + 1;
+                    currentSpawn.memory.exRm1Hostiles = true;
+                    }
+                } else{
+                    currentSpawn.memory.exRm1Hostiles = false;
+                }
+                if(invFlg5337.memory.hostiles == true){
+                    var currentAmountCheck = _.filter(Game.creeps, (creep) => creep.memory.role == 'defender' && creep.memory.target == 'W53N37');
+                    if(currentAmountCheck[0] == undefined){
+                    rm7Defs = rm7Defs + 1;
+                    currentSpawn.memory.exRm2Hostiles = true;
+                    }
+                } else{
+                    currentSpawn.memory.exRm2Hostiles = false;
+                }
+                if(invFlg5437.memory.hostiles == true){
+                    var currentAmountCheck = _.filter(Game.creeps, (creep) => creep.memory.role == 'defender' && creep.memory.target == 'W54N37');
+                    if(currentAmountCheck[0] == undefined){
+                    rm7Defs = rm7Defs + 1;
+                    currentSpawn.memory.exRm3Hostiles = true;
+                    }
+                } else{
+                    currentSpawn.memory.exRm3Hostiles = false;
+                }
+            } else{
+                var rm7Defs = 0;
+            }
+            if(flg1.memory.RES5438 < 2500 || flg1.memory.RES5337 < 2500 || flg1.memory.RES5437 < 2500){
+                var rm7Claimers = 0;
+                if(flg1.memory.RES5438 < 2500){
+                    var currentAmountCheck = _.filter(Game.creeps, (creep) => creep.memory.role == 'claimer' && creep.memory.target == 'W54N38');
+                    if(currentAmountCheck[0] == undefined){
+                    rm7Claimers = rm7Claimers + 1;
+                    currentSpawn.memory.exRm1Claimer = true;
+                    } else{
+                    currentSpawn.memory.exRm1Claimer = false;
+                }
+                }
+                if(flg1.memory.RES5337 < 2500){
+                    var currentAmountCheck = _.filter(Game.creeps, (creep) => creep.memory.role == 'claimer' && creep.memory.target == 'W53N37');
+                    if(currentAmountCheck[0] == undefined){
+                    rm7Claimers = rm7Claimers + 1;
+                    currentSpawn.memory.exRm2Claimer = true;
+                    } else{
+                    currentSpawn.memory.exRm2Claimer = false;
+                }
+                }
+                if(flg1.memory.RES5437 < 2500){
+                    var currentAmountCheck = _.filter(Game.creeps, (creep) => creep.memory.role == 'claimer' && creep.memory.target == 'W54N37');
+                    if(currentAmountCheck[0] == undefined){
+                    rm7Claimers = rm7Claimers + 1;
+                    currentSpawn.memory.exRm3Claimer = true;
+                    } else{
+                    currentSpawn.memory.exRm3Claimer = false;
+                }
+                } else{
+                    currentSpawn.memory.exRm3Claimer = false;
+                }
+            } else{
+                var rm7Claimers = 0;
+            }
+            if(min7.ticksToRegeneration == undefined){
+                var currentAmountCheck = _.filter(Game.creeps, (creep) => creep.memory.role == 'minMiner' && creep.memory.home == currentSpawn.room.name);
+                if(currentAmountCheck[0] == undefined){
+                var rm7MinMiners = 1;
+                }
+            } else{
+                var rm7MinMiners = 0;
+            }
+            if(Game.rooms['W53N38'].storage > 950000){
+                var currentAmountCheck = _.filter(Game.creeps, (creep) => creep.memory.role == 'wallRepairer' && creep.memory.target == currentSpawn.room.name);
+                if(currentAmountCheck[0] == undefined){
+                var rm7WallRepairers = 1;
+                }
+            } else{
+                var rm7WallRepairers = 0;
+            }
+            var roleArray = [['bus', '1'],['collectorTwo','2'],['busTower','1'],['upgrader','1'],['sweep','1'],['labNukeTran','1'],['builder','0'],['defender', rm7Defs],['claimer', rm7Claimers],['farMinerTwo','6'],['conTranTwo','6'],['minMiner', rm7MinMiners],['wallRepairer', '0']]; 
+            currentSpawn.rmMgmt(roleArray);
+        } else if(currentSpawn.room.name == 'W68N33'){
+            if(invFlg6933.memory.hostiles == true){
+                var currentAmountCheck = _.filter(Game.creeps, (creep) => creep.memory.role == 'defender' && creep.memory.target == 'W69N33');
+                if(currentAmountCheck[0] == undefined){
+                    var rm1Defs = 1;
+                    currentSpawn.memory.exRm1Hostiles = true; 
+                }
+            } else{
+                var rm1Defs = 0;
+                currentSpawn.memory.exRm1Hostiles = false;
+            }
+            if(flg1.memory.RES6933 < 2500){
+                var currentAmountCheck = _.filter(Game.creeps, (creep) => creep.memory.role == 'claimer' && creep.memory.target == 'W69N33');
+                if(currentAmountCheck[0] == undefined){
+                    var rm1Claimers = 1;
+                    currentSpawn.memory.exRm1Claimer = true;
+                } else{
+                currentSpawn.memory.exRm1Claimer = false;
+            }
+                
+            }
+            var roleArray = [['bus', '1'],['collectorTwo','2'],['busTower','1'],['upgrader','1'],['sweep','1'],['labNukeTran','1'],['builder','0'],['defender', rm1Defs],['claimer',rm1Claimers],['farBuilder','0'],['farMinerTwo','2'],['conTranTwo','2']]; 
+            currentSpawn.rmMgmt(roleArray);
+        } else if(currentSpawn.room.name == 'W76N32'){
+            if(invFlg7732.memory.hostiles == true){
+                var currentAmountCheck = _.filter(Game.creeps, (creep) => creep.memory.role == 'defender' && creep.memory.target == 'W77N32');
+                if(currentAmountCheck[0] == undefined){
+                    var rm1Defs = 1;
+                    currentSpawn.memory.exRm1Hostiles = true; 
+                }
+            } else{
+                var rm1Defs = 0;
+                currentSpawn.memory.exRm1Hostiles = false;
+            }
+            if(flg1.memory.RES7732 < 2500){
+                var currentAmountCheck = _.filter(Game.creeps, (creep) => creep.memory.role == 'claimer' && creep.memory.target == 'W77N32');
+                if(currentAmountCheck[0] == undefined){
+                    var rm1Claimers = 1;
+                    currentSpawn.memory.exRm1Claimer = true;
+                } else{
+                currentSpawn.memory.exRm1Claimer = false;
+            }
+                
+            }
+            var roleArray = [['bus', '1'],['collectorTwo','2'],['busTower','1'],['upgrader','1'],['sweep','1'],['labNukeTran','1'],['builder','0'],['defender', rm1Defs],['claimer',rm1Claimers],['farBuilder','0'],['farMinerTwo','2'],['conTranTwo','2']]; 
+            currentSpawn.rmMgmt(roleArray);
+        }
+    }
+    }
+    var allSpawnCooldown = _.filter(Game.spawns, (s) => s.memory.spawnMemSaver != 0);
+    for(let currentSpawnTgt of allSpawnCooldown){
+        if(currentSpawnTgt.memory.spawnMemSaver < 0){
+            currentSpawnTgt.memory.spawnMemSaver = 0;
+        } else{
+            currentSpawnTgt.memory.spawnMemSaver = (currentSpawnTgt.memory.spawnMemSaver - 1);
+        }
+    }
+    
+    
         
     // Terminal Managment
     var termRM1 = Game.rooms['W62N38'].terminal
@@ -612,9 +808,9 @@ module.exports.loop = function () {
     var go2Lab372 = Game.getObjectById('59a61f262bd5a135afdee7fa');
     var go2Lab373 = Game.getObjectById('59a5cc0a6055135ee1d1409a');
     
-    var bstLab1 = Game.getObjectById('59a23110f42c613feaf33191');
+    var bstLab1 = Game.getObjectById('59fad56b1da7153fb91c39d0');
     var bstLab2 = Game.getObjectById('59a5eb7072fd6a799d9f8ff7');
-    var bstLab3 = Game.getObjectById('59d5285503606977a110c8f7');
+    var bstLab3 = Game.getObjectById('59fc47f2f7c99f4d3f7d0e41');
     
     var xLab = Game.getObjectById('59e04cce0ab84515a1fc3273');
     var gohoLab = Game.getObjectById('59d62874323e0348208bcc64');
@@ -718,11 +914,11 @@ module.exports.loop = function () {
     }
     }
     
-    var creepTgt = bstLab3.pos.findClosestByRange(FIND_MY_CREEPS, {filter: (s) => s.memory.role == 'upgrader' });
-    var rngTgt = bstLab3.pos.getRangeTo(creepTgt);
+    var creepTgt = bstLab1.pos.findClosestByRange(FIND_MY_CREEPS, {filter: (s) => s.memory.role == 'upgrader' });
+    var rngTgt = bstLab1.pos.getRangeTo(creepTgt);
 
     if(rngTgt <= 1){
-        bstLab3.boostCreep(creepTgt);
+        bstLab1.boostCreep(creepTgt);
     }
     
     var creepTgt = bstLab2.pos.findClosestByRange(FIND_MY_CREEPS, {filter: (s) => s.getActiveBodyparts(HEAL) > 2})
@@ -731,6 +927,12 @@ module.exports.loop = function () {
         bstLab2.boostCreep(creepTgt);
     }
     
+    var creepTgt = bstLab3.pos.findClosestByRange(FIND_MY_CREEPS, {filter: (s) => s.memory.role == 'upgrader' });
+    var rngTgt = bstLab3.pos.getRangeTo(creepTgt);
+
+    if(rngTgt <= 1){
+        bstLab3.boostCreep(creepTgt);
+    }
 
     if(termRM1.store[RESOURCE_ENERGY] < 50000 && termRM3.store[RESOURCE_ENERGY] > 60000 && termRM3.cooldown == 0){
         var ammount = (50000-termRM1.store[RESOURCE_ENERGY]);
@@ -813,19 +1015,18 @@ module.exports.loop = function () {
     // RM 9 Visuals
     new RoomVisual('W68N33').text("Total Energy: " + Game.rooms['W68N33'].energyAvailable + " / " + Game.rooms['W68N33'].energyCapacityAvailable, 23, 26, {color: 'yellow', font: 0.8});
 
-    //Mineral declerations
-    var min1 = Game.getObjectById('57efa006195b160f02c74e5a');
-    var min2 = Game.getObjectById('57efa006195b160f02c74e59');   
-    var min3 = Game.getObjectById('579fab82b1f02a3b0cfefe36');
-    var min4 = Game.getObjectById('57efa003195b160f02c74b65');
-    var min5 = Game.getObjectById('57efa005195b160f02c74d2c');    
-    var min6 = Game.getObjectById('5836baa6090e0ab576fdd089');   
-    var min7 = Game.getObjectById('579fab83b1f02a3b0cfeff79');   
+   
 
     
     // Storage dec
     var storeRM3 = Game.getObjectById('596159a622491078e05327cf');
     
+    
+    
+    
+    /*
+    
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     
         
     // set 'lengths' for each type of creep so we can compair them.
@@ -991,7 +1192,7 @@ module.exports.loop = function () {
     var labNukeTransRM6 = _.filter(Game.creeps, (creep) => creep.memory.role == 'labNukeTran' && creep.memory.home == 'W73N36');
     var farBuilderRM6 = _.filter(Game.creeps, (creep) => creep.memory.role == 'farBuilder' && creep.memory.home == 'W73N36');
     var farUpgraderRM6 = _.filter(Game.creeps, (creep) => creep.memory.role == 'farUpgrader' && creep.memory.home == 'W73N36');
-
+    var columbusRM6 = _.filter(Game.creeps, (creep) => creep.memory.role == 'columbus' && creep.memory.home == 'W73N36');
 
 
     // RM1 Spawn activities.
@@ -1516,7 +1717,7 @@ module.exports.loop = function () {
         } else{
         var newName = Game.spawns['Spawn32'].createCreep([CLAIM,CLAIM,MOVE,MOVE], undefined, {role: 'claimer', home: 'W57N37', target: 'W56N38'});
         }
-    } else if (sDefRM3.length < 1){
+    } else if (sDefRM3.length < 0){
         if(Game.spawns['Spawn3'].canCreateCreep() != ERR_BUSY){
         var newName = Game.spawns['Spawn3'].createCreep([MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,ATTACK,ATTACK,ATTACK,ATTACK,ATTACK,ATTACK,ATTACK,ATTACK,ATTACK,ATTACK,ATTACK,ATTACK,ATTACK,ATTACK,ATTACK,ATTACK,ATTACK,ATTACK,ATTACK,ATTACK,ATTACK,HEAL,HEAL,HEAL,HEAL], undefined, {role: 'sDef', home: 'W57N37', target: 'W56N36', bstLab: '59a5eb7072fd6a799d9f8ff7', boosted: '0'});
     } else if(Game.spawns['Spawn31'].canCreateCreep() != ERR_BUSY){
@@ -1524,7 +1725,7 @@ module.exports.loop = function () {
         } else{
         var newName = Game.spawns['Spawn32'].createCreep([MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,ATTACK,ATTACK,ATTACK,ATTACK,ATTACK,ATTACK,ATTACK,ATTACK,ATTACK,ATTACK,ATTACK,ATTACK,ATTACK,ATTACK,ATTACK,ATTACK,ATTACK,ATTACK,ATTACK,ATTACK,ATTACK,HEAL,HEAL,HEAL,HEAL], undefined, {role: 'sDef', home: 'W57N37', target: 'W56N36', bstLab: '59a5eb7072fd6a799d9f8ff7', boosted: '0'});
         }
-    } else if (minMinersRM31.length < 1){
+    } else if (minMinersRM31.length < 0){
         if(Game.spawns['Spawn3'].canCreateCreep() != ERR_BUSY){
         var newName = Game.spawns['Spawn3'].createCreep([WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,WORK,MOVE,WORK,MOVE,WORK,MOVE,WORK,MOVE,WORK,MOVE], undefined, {role: 'minMiner', home: 'W57N37', target: 'W56N36', minID: '579fab9d43bc207b0c99a0c5'});
     } else if(Game.spawns['Spawn31'].canCreateCreep() != ERR_BUSY){
@@ -1532,7 +1733,7 @@ module.exports.loop = function () {
         } else{
         var newName = Game.spawns['Spawn32'].createCreep([WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,WORK,MOVE,WORK,MOVE,WORK,MOVE,WORK,MOVE,WORK,MOVE], undefined, {role: 'minMiner', home: 'W57N37', target: 'W56N36', minID: '579fab9d43bc207b0c99a0c5'});
         }
-    } else if (farMinersTwoRM39.length < 1){
+    } else if (farMinersTwoRM39.length < 0){
         if(Game.spawns['Spawn3'].canCreateCreep() != ERR_BUSY){
         var newName = Game.spawns['Spawn3'].createCreep([WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,CARRY,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE], undefined, {role: 'farMinerTwo', home: 'W57N37', target: 'W56N36', sourceID: '579fa8840700be0674d2dbee', containerID: '59f3d3e9e999fb5d672bf268'});
     } else if(Game.spawns['Spawn31'].canCreateCreep() != ERR_BUSY){
@@ -1540,7 +1741,7 @@ module.exports.loop = function () {
         } else{
         var newName = Game.spawns['Spawn32'].createCreep([WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,CARRY,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE], undefined, {role: 'farMinerTwo', home: 'W57N37', target: 'W56N36', sourceID: '579fa8840700be0674d2dbee', containerID: '59f3d3e9e999fb5d672bf268'});
         }
-    } else if (conTransTwoRM38.length < 1){
+    } else if (conTransTwoRM38.length < 0){
         if(Game.spawns['Spawn3'].canCreateCreep() != ERR_BUSY){
         var newName = Game.spawns['Spawn3'].createCreep([CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,CARRY,CARRY,MOVE,CARRY,CARRY,MOVE,CARRY,CARRY,MOVE,CARRY,CARRY,MOVE,WORK,MOVE], undefined, {role: 'conTranTwo', home: 'W57N37', target: 'W56N36', containerID: '59f3d3e9e999fb5d672bf268', deposit: '59c4447ba5080c4de4edc4fc'});
     } else if(Game.spawns['Spawn31'].canCreateCreep() != ERR_BUSY){
@@ -1556,7 +1757,7 @@ module.exports.loop = function () {
         } else{
         var newName7 = Game.spawns['Spawn32'].createCreep([WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,CARRY,CARRY,MOVE,CARRY,CARRY,MOVE,CARRY,CARRY,MOVE,CARRY,CARRY,MOVE,CARRY,CARRY,MOVE,CARRY,CARRY,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE], undefined, {role: 'farBuilder', home: 'W57N37', target: 'W56N36'});
         }
-    } else if (farMinersTwoRM310.length < 1){
+    } else if (farMinersTwoRM310.length < 0){
         if(Game.spawns['Spawn3'].canCreateCreep() != ERR_BUSY){
         var newName = Game.spawns['Spawn3'].createCreep([WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,CARRY,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE], undefined, {role: 'farMinerTwo', home: 'W57N37', target: 'W56N36', sourceID: '579fa8840700be0674d2dbf1', containerID: '59f3e2b8cee32660e68e1843'});
     } else if(Game.spawns['Spawn31'].canCreateCreep() != ERR_BUSY){
@@ -1564,7 +1765,7 @@ module.exports.loop = function () {
         } else{
         var newName = Game.spawns['Spawn32'].createCreep([WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,CARRY,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE], undefined, {role: 'farMinerTwo', home: 'W57N37', target: 'W56N36', sourceID: '579fa8840700be0674d2dbf1', containerID: '59f3e2b8cee32660e68e1843'});
         }
-    } else if (conTransTwoRM39.length < 1){
+    } else if (conTransTwoRM39.length < 0){
         if(Game.spawns['Spawn3'].canCreateCreep() != ERR_BUSY){
         var newName = Game.spawns['Spawn3'].createCreep([CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,CARRY,CARRY,MOVE,CARRY,CARRY,MOVE,CARRY,CARRY,MOVE,CARRY,CARRY,MOVE,WORK,MOVE], undefined, {role: 'conTranTwo', home: 'W57N37', target: 'W56N36', containerID: '59f3e2b8cee32660e68e1843', deposit: '596159a622491078e05327cf'});
     } else if(Game.spawns['Spawn31'].canCreateCreep() != ERR_BUSY){
@@ -1572,7 +1773,7 @@ module.exports.loop = function () {
         } else{
         var newName = Game.spawns['Spawn32'].createCreep([CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,CARRY,CARRY,MOVE,CARRY,CARRY,MOVE,CARRY,CARRY,MOVE,CARRY,CARRY,MOVE,WORK,MOVE], undefined, {role: 'conTranTwo', home: 'W57N37', target: 'W56N36', containerID: '59f3e2b8cee32660e68e1843', deposit: '596159a622491078e05327cf'});
         }
-    } else if (farMinersTwoRM311.length < 1){
+    } else if (farMinersTwoRM311.length < 0){
         if(Game.spawns['Spawn3'].canCreateCreep() != ERR_BUSY){
         var newName = Game.spawns['Spawn3'].createCreep([WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,CARRY,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE], undefined, {role: 'farMinerTwo', home: 'W57N37', target: 'W56N36', sourceID: '579fa8840700be0674d2dbf2', containerID: '59f3f63ee15e76052350739a'});
     } else if(Game.spawns['Spawn31'].canCreateCreep() != ERR_BUSY){
@@ -1580,7 +1781,7 @@ module.exports.loop = function () {
         } else{
         var newName = Game.spawns['Spawn32'].createCreep([WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,CARRY,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE], undefined, {role: 'farMinerTwo', home: 'W57N37', target: 'W56N36', sourceID: '579fa8840700be0674d2dbf2', containerID: '59f3f63ee15e76052350739a'});
         }
-    } else if (conTransTwoRM310.length < 1){
+    } else if (conTransTwoRM310.length < 0){
         if(Game.spawns['Spawn3'].canCreateCreep() != ERR_BUSY){
         var newName = Game.spawns['Spawn3'].createCreep([CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,CARRY,CARRY,MOVE,CARRY,CARRY,MOVE,CARRY,CARRY,MOVE,CARRY,CARRY,MOVE,WORK,MOVE], undefined, {role: 'conTranTwo', home: 'W57N37', target: 'W56N36', containerID: '59f3f63ee15e76052350739a', deposit: '596159a622491078e05327cf'});
     } else if(Game.spawns['Spawn31'].canCreateCreep() != ERR_BUSY){
@@ -1759,7 +1960,7 @@ module.exports.loop = function () {
     } else {
         var newName2 = Game.spawns['Spawn41'].createCreep([CLAIM,CLAIM,MOVE,MOVE], undefined, {role: 'claimer', home: 'W69N39', target: 'W67N39'});
         }
-    } else if (farBuilderRM4.length < 2){
+    } else if (farBuilderRM4.length < 0){
         if(Game.spawns['Spawn4'].canCreateCreep() != ERR_BUSY){
         var newName = Game.spawns['Spawn4'].createCreep([WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,WORK,WORK,WORK,WORK,WORK,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE], undefined, {role: 'farBuilder', target: 'W70N34', home: 'W69N39'});
     } else if(Game.spawns['Spawn41'].canCreateCreep() != ERR_BUSY) {
@@ -1767,7 +1968,7 @@ module.exports.loop = function () {
         } else{
         var newName6 = Game.spawns['Spawn42'].createCreep([WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,WORK,WORK,WORK,WORK,WORK,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE], undefined, {role: 'farBuilder', target: 'W70N34', home: 'W69N39'});
         }
-    } else if (farUpgraderRM4.length < 2){
+    } else if (farUpgraderRM4.length < 0){
         if(Game.spawns['Spawn4'].canCreateCreep() != ERR_BUSY){
         var newName = Game.spawns['Spawn4'].createCreep([WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,WORK,WORK,WORK,WORK,WORK,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE], undefined, {role: 'farUpgrader', target: 'W70N34', home: 'W69N39'});
     } else if(Game.spawns['Spawn41'].canCreateCreep() != ERR_BUSY) {
@@ -2013,7 +2214,16 @@ module.exports.loop = function () {
         } else{
         var newName6 = Game.spawns['Spawn62'].createCreep([WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,WORK,WORK,WORK,WORK,WORK,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE], undefined, {role: 'farUpgrader', target: 'W72N32', home: 'W73N36'});
         }
+    } else if (columbusRM6.length < 0){
+        if(Game.spawns['Spawn6'].canCreateCreep() != ERR_BUSY){
+        var newName = Game.spawns['Spawn6'].createCreep([CLAIM,MOVE,MOVE,MOVE], undefined, {role: 'columbus', target: 'W72N32', home: 'W73N36'});
+    } else if(Game.spawns['Spawn61'].canCreateCreep() != ERR_BUSY) {
+        var newName6 = Game.spawns['Spawn61'].createCreep([CLAIM,MOVE,MOVE,MOVE], undefined, {role: 'columbus', target: 'W72N32', home: 'W73N36'});
+        } else{
+        var newName6 = Game.spawns['Spawn62'].createCreep([CLAIM,MOVE,MOVE,MOVE], undefined, {role: 'columbus', target: 'W72N32', home: 'W73N36'});
+        }
     }
+    
     
     var busesTowersRM7 = _.filter(Game.creeps, (creep) => creep.memory.role == 'busTower' && creep.memory.home == 'W53N38');
     var busesRM7 = _.filter(Game.creeps, (creep) => creep.memory.role == 'bus' && creep.memory.home == 'W53N38');
@@ -2032,7 +2242,7 @@ module.exports.loop = function () {
     var conTransTwoRM72 = _.filter(Game.creeps, (creep) => creep.memory.role == 'conTranTwo' && creep.memory.containerID == '59e549c754c518662e3058d4');
     var conTransTwoRM73 = _.filter(Game.creeps, (creep) => creep.memory.role == 'conTranTwo' && creep.memory.containerID == '59e561eb6b81aa2d49e13648');
     var conTransTwoRM74 = _.filter(Game.creeps, (creep) => creep.memory.role == 'conTranTwo' && creep.memory.containerID == '59e6bdc51deb6b258b6a01ca');
-    var conTransTwoRM75 = _.filter(Game.creeps, (creep) => creep.memory.role == 'conTranTwo' && creep.memory.containerID == '59e6f6d91ab27a32092d9d0b');
+    var conTransTwoRM75 = _.filter(Game.creeps, (creep) => creep.memory.role == 'conTranTwo' && creep.memory.containerID == '5a038665d1858b6f963d61f7');
     var claimersRM7  = _.filter(Game.creeps, (creep) => creep.memory.role == 'claimer' && creep.memory.target == 'W54N38');
     var claimersRM71  = _.filter(Game.creeps, (creep) => creep.memory.role == 'claimer' && creep.memory.target == 'W53N37');
     var claimersRM72  = _.filter(Game.creeps, (creep) => creep.memory.role == 'claimer' && creep.memory.target == 'W54N37');
@@ -2076,9 +2286,9 @@ module.exports.loop = function () {
             }
         } else {
             if(Game.spawns['Spawn7'].canCreateCreep() != ERR_BUSY){
-                var newName = Game.spawns['Spawn7'].createCreep([CARRY,CARRY,MOVE,CARRY,CARRY,MOVE,CARRY,CARRY,MOVE,CARRY,CARRY,MOVE,CARRY,CARRY,MOVE,CARRY,CARRY,MOVE,CARRY,CARRY,MOVE,CARRY,CARRY,MOVE], undefined, {role: 'bus', home: 'W53N38'});
+                var newName = Game.spawns['Spawn7'].createCreep([CARRY,CARRY,MOVE,CARRY,CARRY,MOVE,CARRY,CARRY,MOVE], undefined, {role: 'bus', home: 'W53N38'});
             } else {
-                var newName7 = Game.spawns['Spawn71'].createCreep([CARRY,CARRY,MOVE,CARRY,CARRY,MOVE,CARRY,CARRY,MOVE,CARRY,CARRY,MOVE,CARRY,CARRY,MOVE,CARRY,CARRY,MOVE,CARRY,CARRY,MOVE,CARRY,CARRY,MOVE], undefined, {role: 'bus', home: 'W53N38'});
+                var newName7 = Game.spawns['Spawn71'].createCreep([CARRY,CARRY,MOVE,CARRY,CARRY,MOVE,CARRY,CARRY,MOVE], undefined, {role: 'bus', home: 'W53N38'});
             }
         }
     } else if (busesTowersRM7.length < 1){
@@ -2235,28 +2445,26 @@ module.exports.loop = function () {
         }
     } else if (farMinersTwoRM77.length < 1){
         if(Game.spawns['Spawn7'].canCreateCreep() != ERR_BUSY){
-        var newName = Game.spawns['Spawn7'].createCreep([WORK,WORK,WORK,WORK,WORK,WORK,WORK,CARRY,MOVE,MOVE,MOVE,MOVE], undefined, {role: 'farMinerTwo', home: 'W53N38', target: 'W54N37', sourceID: '579fa8a50700be0674d2e053', containerID: '59e6f6d91ab27a32092d9d0b'});
+        var newName = Game.spawns['Spawn7'].createCreep([WORK,WORK,WORK,WORK,WORK,WORK,WORK,CARRY,MOVE,MOVE,MOVE,MOVE], undefined, {role: 'farMinerTwo', home: 'W53N38', target: 'W54N37', sourceID: '579fa8a50700be0674d2e053', containerID: '5a038665d1858b6f963d61f7'});
         } else{
-        var newName7 = Game.spawns['Spawn71'].createCreep([WORK,WORK,WORK,WORK,WORK,WORK,WORK,CARRY,MOVE,MOVE,MOVE,MOVE], undefined, {role: 'farMinerTwo', home: 'W53N38', target: 'W54N37', sourceID: '579fa8a50700be0674d2e053', containerID: '59e6f6d91ab27a32092d9d0b'});
+        var newName7 = Game.spawns['Spawn71'].createCreep([WORK,WORK,WORK,WORK,WORK,WORK,WORK,CARRY,MOVE,MOVE,MOVE,MOVE], undefined, {role: 'farMinerTwo', home: 'W53N38', target: 'W54N37', sourceID: '579fa8a50700be0674d2e053', containerID: '5a038665d1858b6f963d61f7'});
         }
     } else if (conTransTwoRM75.length < 2) {
         if(Game.spawns['Spawn7'].canCreateCreep() != ERR_BUSY){
-        var newName = Game.spawns['Spawn7'].createCreep([CARRY,CARRY,MOVE,CARRY,CARRY,MOVE,CARRY,CARRY,MOVE,CARRY,CARRY,MOVE,CARRY,CARRY,MOVE,MOVE,CARRY,CARRY,MOVE,CARRY,CARRY,MOVE,CARRY,CARRY,MOVE,CARRY,CARRY,MOVE,CARRY,CARRY,MOVE,WORK,MOVE,CARRY,CARRY,MOVE,CARRY,CARRY,MOVE,CARRY,CARRY,MOVE,CARRY,CARRY,MOVE,CARRY,CARRY,MOVE,WORK,MOVE], undefined, {role: 'conTranTwo', home: 'W53N38', target: 'W54N37', containerID: '59e6f6d91ab27a32092d9d0b', deposit: '59c9628ab2ba3d31290a82bd'});
+        var newName = Game.spawns['Spawn7'].createCreep([CARRY,CARRY,MOVE,CARRY,CARRY,MOVE,CARRY,CARRY,MOVE,CARRY,CARRY,MOVE,CARRY,CARRY,MOVE,MOVE,CARRY,CARRY,MOVE,CARRY,CARRY,MOVE,CARRY,CARRY,MOVE,CARRY,CARRY,MOVE,CARRY,CARRY,MOVE,WORK,MOVE,CARRY,CARRY,MOVE,CARRY,CARRY,MOVE,CARRY,CARRY,MOVE,CARRY,CARRY,MOVE,CARRY,CARRY,MOVE,WORK,MOVE], undefined, {role: 'conTranTwo', home: 'W53N38', target: 'W54N37', containerID: '5a038665d1858b6f963d61f7', deposit: '59c9628ab2ba3d31290a82bd'});
         } else{
-        var newName7 = Game.spawns['Spawn71'].createCreep([CARRY,CARRY,MOVE,CARRY,CARRY,MOVE,CARRY,CARRY,MOVE,CARRY,CARRY,MOVE,CARRY,CARRY,MOVE,MOVE,CARRY,CARRY,MOVE,CARRY,CARRY,MOVE,CARRY,CARRY,MOVE,CARRY,CARRY,MOVE,CARRY,CARRY,MOVE,WORK,MOVE,CARRY,CARRY,MOVE,CARRY,CARRY,MOVE,CARRY,CARRY,MOVE,CARRY,CARRY,MOVE,CARRY,CARRY,MOVE,WORK,MOVE], undefined, {role: 'conTranTwo', home: 'W53N38', target: 'W54N37', containerID: '59e6f6d91ab27a32092d9d0b', deposit: '59c9628ab2ba3d31290a82bd'});
+        var newName7 = Game.spawns['Spawn71'].createCreep([CARRY,CARRY,MOVE,CARRY,CARRY,MOVE,CARRY,CARRY,MOVE,CARRY,CARRY,MOVE,CARRY,CARRY,MOVE,MOVE,CARRY,CARRY,MOVE,CARRY,CARRY,MOVE,CARRY,CARRY,MOVE,CARRY,CARRY,MOVE,CARRY,CARRY,MOVE,WORK,MOVE,CARRY,CARRY,MOVE,CARRY,CARRY,MOVE,CARRY,CARRY,MOVE,CARRY,CARRY,MOVE,CARRY,CARRY,MOVE,WORK,MOVE], undefined, {role: 'conTranTwo', home: 'W53N38', target: 'W54N37', containerID: '5a038665d1858b6f963d61f7', deposit: '59c9628ab2ba3d31290a82bd'});
         }
     }
 
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    var harvesterRM8 = _.filter(Game.creeps, (creep) => creep.memory.role == 'harvester' && creep.memory.home == 'W76N32');
-    var harvesterRM9 = _.filter(Game.creeps, (creep) => creep.memory.role == 'harvester' && creep.memory.home == 'W68N33');
-    
-    if (harvesterRM8.length < 2) {
-        var newName = Game.spawns['Spawn8'].createCreep([WORK,CARRY,MOVE], undefined, {role: 'harvester', home: 'W76N32'});
-    }
-    if (harvesterRM9.length < 2) {
-        var newName = Game.spawns['Spawn9'].createCreep([WORK,CARRY,MOVE], undefined, {role: 'harvester', home: 'W68N33'});
-    }
+    */
+
+
+
+
+
 
     
     // loop to run all creeps logic

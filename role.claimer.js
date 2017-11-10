@@ -15,6 +15,9 @@ module.exports = {
             }
         }
         }
+        if(creep.room.name == 'W68N33'){
+            creep.moveTo(0,15)
+        }
     }
     
 };

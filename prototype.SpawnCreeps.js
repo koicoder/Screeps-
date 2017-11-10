@@ -15,8 +15,6 @@ StructureSpawn.prototype.rmMgmt =
                 var creepToSpawn = roleArray[i][0];
                 var ammountToSpawn = roleArray[i][1];
                 break;
-            } else if(i == roleArray.length){
-                this.memory.spawnMemSaver == 15;
             }
         }
         
@@ -49,7 +47,7 @@ StructureSpawn.prototype.rmMgmt =
         }
         
         if(creepToSpawn == 'conTranTwo'){
-            return this.conTranTwoSpawn();
+            return this.conTranTwoSpawn(roomCreeps, creepToSpawn);
         }
         
         if(creepToSpawn == 'collectorTwo'){
@@ -60,20 +58,8 @@ StructureSpawn.prototype.rmMgmt =
             return this.defenderSpawn();
         }
         
-        if(creepToSpawn == 'farBuilder'){
-            if(this.room.name == 'W73N36'){
-                return Game.spawns['Spawn6'].createCreep([WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,WORK,WORK,WORK,WORK,WORK,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE], undefined, {role: 'farBuilder', target: 'W72N32', home: 'W73N36'});
-            } else if(this.room.name == ''){
-                
-            }
-        }
-        
-        if(creepToSpawn == 'farUpgrader'){
-            if(this.room.name == 'W73N36'){
-                
-            } else if(this.room.name == ''){
-                return Game.spawns['Spawn4'].createCreep([WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,WORK,WORK,WORK,WORK,WORK,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE], undefined, {role: 'farUpgrader', target: 'W70N34', home: 'W69N39'});
-            }
+        if(creepToSpawn == 'farBuilder' || creepToSpawn == 'farUpgrader'){
+            return this.farBuilderSpawn(creepToSpawn);
         }
         
         if(creepToSpawn == 'upgrader'){
@@ -99,13 +85,20 @@ StructureSpawn.prototype.rmMgmt =
         if(creepToSpawn == 'farMinerTwoSK'){
             return this.farMinerTwoSKSpawn(roomCreeps);
         }
+        if(creepToSpawn == 'conTranTwoSK'){
+            return this.conTranTwoSKSpawn(roomCreeps);
+        }
+        if(creepToSpawn == undefined){
+            this.memory.spawnMemSaver = 15;
+        }
+        
     }
 
 StructureSpawn.prototype.collectorTwoSpawn = 
     function(roomCreeps, creepToSpawn){
     
         var anySpawned = _.filter(roomCreeps, s => s.memory.role == creepToSpawn);
-        if(anySpawned == undefined){
+        if(anySpawned[0] == undefined){
             return this.spawnCreep([WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,CARRY,MOVE,MOVE,MOVE,MOVE,MOVE], ('collectorTwo'+Math.floor(Math.random()*1000)), {memory: {role: creepToSpawn, home: this.room.name, sourceID: this.memory.rmSource0, containerID: this.memory.rmContainer0, depositID: this.memory.rmDeposit0}});
         } else if(anySpawned[0].memory.sourceID == this.memory.rmSource0) {
             return this.spawnCreep([WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,CARRY,MOVE,MOVE,MOVE,MOVE,MOVE], ('collectorTwo'+Math.floor(Math.random()*1000)), {memory: {role: creepToSpawn, home: this.room.name, sourceID: this.memory.rmSource1, containerID: this.memory.rmContainer1, depositID: this.memory.rmDeposit1}});
@@ -119,24 +112,24 @@ StructureSpawn.prototype.farMinerTwoSKSpawn =
         
         if(this.memory.skRm1 != undefined){
             var anySpawned = _.filter(roomCreeps, s => s.memory.role == 'farMiner' && s.memory.target == this.memory.skRm1);
-            if(anySpawned == undefined){
-                return this.spawnCreep([WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,CARRY,MOVE,MOVE,MOVE,MOVE,MOVE], ('farMinerTwo'+Math.floor(Math.random()*1000)), {memory: {role: 'farMinerTwo', home: this.room.name, target: this.memory.skRm1, sourceID: this.memory.skRm1Source0, containerID: this.memory.skRm1Container0, depositID: this.memory.skRm1DepositID0}});
+            if(anySpawned[0] == undefined){
+                return this.spawnCreep([WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,CARRY,MOVE,MOVE,MOVE,MOVE,MOVE], ('farMinerTwo'+Math.floor(Math.random()*1000)), {memory: {role: 'farMinerTwo', home: this.room.name, target: this.memory.skRm1, sourceID: this.memory.skRm1Source0, containerID: this.memory.skRm1Container0, deposit: this.memory.skRm1deposit0}});
             } else {
                 if(anySpawned.length == 1){
                     if(anySpawned[0].memory.sourceID == this.memory.skRm1SourceID0){
-                        return this.spawnCreep([WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,CARRY,MOVE,MOVE,MOVE,MOVE,MOVE], ('farMinerTwo'+Math.floor(Math.random()*1000)), {memory: {role: 'farMinerTwo', home: this.room.name, target: this.memory.skRm1, sourceID: this.memory.skRm1Source1, containerID: this.memory.skRm1Container1, depositID: this.memory.skRm1DepositID0}});
+                        return this.spawnCreep([WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,CARRY,MOVE,MOVE,MOVE,MOVE,MOVE], ('farMinerTwo'+Math.floor(Math.random()*1000)), {memory: {role: 'farMinerTwo', home: this.room.name, target: this.memory.skRm1, sourceID: this.memory.skRm1Source1, containerID: this.memory.skRm1Container1, deposit: this.memory.skRm1deposit0}});
                     } else if(anySpawned[0].memory.sourceID == this.memory.skRm1SourceID1){
-                        return this.spawnCreep([WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,CARRY,MOVE,MOVE,MOVE,MOVE,MOVE], ('farMinerTwo'+Math.floor(Math.random()*1000)), {memory: {role: 'farMinerTwo', home: this.room.name, target: this.memory.skRm1, sourceID: this.memory.skRm1Source0, containerID: this.memory.skRm1Container0, depositID: this.memory.skRm1DepositID0}});
+                        return this.spawnCreep([WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,CARRY,MOVE,MOVE,MOVE,MOVE,MOVE], ('farMinerTwo'+Math.floor(Math.random()*1000)), {memory: {role: 'farMinerTwo', home: this.room.name, target: this.memory.skRm1, sourceID: this.memory.skRm1Source0, containerID: this.memory.skRm1Container0, deposit: this.memory.skRm1deposit0}});
                     } else if(anySpawned[0].memory.sourceID == this.memory.skRm1SourceID2){
-                        return this.spawnCreep([WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,CARRY,MOVE,MOVE,MOVE,MOVE,MOVE], ('farMinerTwo'+Math.floor(Math.random()*1000)), {memory: {role: 'farMinerTwo', home: this.room.name, target: this.memory.skRm1, sourceID: this.memory.skRm1Source0, containerID: this.memory.skRm1Container0, depositID: this.memory.skRm1DepositID0}});
+                        return this.spawnCreep([WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,CARRY,MOVE,MOVE,MOVE,MOVE,MOVE], ('farMinerTwo'+Math.floor(Math.random()*1000)), {memory: {role: 'farMinerTwo', home: this.room.name, target: this.memory.skRm1, sourceID: this.memory.skRm1Source0, containerID: this.memory.skRm1Container0, deposit: this.memory.skRm1deposit0}});
                     }
                 } else if(anySpawned.length == 2){
                     if(anySpawned[0].memory.sourceID == this.memory.skRm1SourceID0 && anySpawned[1].memory.sourceID == this.memory.skRm1SourceID1 || anySpawned[0].memory.sourceID == this.memory.skRm1SourceID1 && anySpawned[1].memory.sourceID == this.memory.skRm1SourceID0){
-                        return this.spawnCreep([WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,CARRY,MOVE,MOVE,MOVE,MOVE,MOVE], ('farMinerTwo'+Math.floor(Math.random()*1000)), {memory: {role: 'farMinerTwo', home: this.room.name, target: this.memory.skRm1, sourceID: this.memory.skRm1Source2, containerID: this.memory.skRm1Container2, depositID: this.memory.skRm1DepositID0}});
+                        return this.spawnCreep([WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,CARRY,MOVE,MOVE,MOVE,MOVE,MOVE], ('farMinerTwo'+Math.floor(Math.random()*1000)), {memory: {role: 'farMinerTwo', home: this.room.name, target: this.memory.skRm1, sourceID: this.memory.skRm1Source2, containerID: this.memory.skRm1Container2, deposit: this.memory.skRm1deposit0}});
                     } else if(anySpawned[0].memory.sourceID == this.memory.skRm1SourceID0 && anySpawned[1].memory.sourceID == this.memory.skRm1SourceID2 || anySpawned[0].memory.sourceID == this.memory.skRm1SourceID2 && anySpawned[1].memory.sourceID == this.memory.skRm1SourceID0){
-                        return this.spawnCreep([WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,CARRY,MOVE,MOVE,MOVE,MOVE,MOVE], ('farMinerTwo'+Math.floor(Math.random()*1000)), {memory: {role: 'farMinerTwo', home: this.room.name, target: this.memory.skRm1, sourceID: this.memory.skRm1Source1, containerID: this.memory.skRm1Container1, depositID: this.memory.skRm1DepositID0}});
+                        return this.spawnCreep([WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,CARRY,MOVE,MOVE,MOVE,MOVE,MOVE], ('farMinerTwo'+Math.floor(Math.random()*1000)), {memory: {role: 'farMinerTwo', home: this.room.name, target: this.memory.skRm1, sourceID: this.memory.skRm1Source1, containerID: this.memory.skRm1Container1, deposit: this.memory.skRm1deposit0}});
                     } else if(anySpawned[0].memory.sourceID == this.memory.skRm1SourceID1 && anySpawned[1].memory.sourceID == this.memory.skRm1SourceID2 || anySpawned[0].memory.sourceID == this.memory.skRm1SourceID2 && anySpawned[1].memory.sourceID == this.memory.skRm1SourceID1){
-                        return this.spawnCreep([WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,CARRY,MOVE,MOVE,MOVE,MOVE,MOVE], ('farMinerTwo'+Math.floor(Math.random()*1000)), {memory: {role: 'farMinerTwo', home: this.room.name, target: this.memory.skRm1, sourceID: this.memory.skRm1Source0, containerID: this.memory.skRm1Container0, depositID: this.memory.skRm1DepositID0}});
+                        return this.spawnCreep([WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,CARRY,MOVE,MOVE,MOVE,MOVE,MOVE], ('farMinerTwo'+Math.floor(Math.random()*1000)), {memory: {role: 'farMinerTwo', home: this.room.name, target: this.memory.skRm1, sourceID: this.memory.skRm1Source0, containerID: this.memory.skRm1Container0, deposit: this.memory.skRm1deposit0}});
                     }
                 }
             }
@@ -161,7 +154,7 @@ StructureSpawn.prototype.collectorTwoSpawn =
     function(roomCreeps, creepToSpawn) {
     
         var anySpawned = _.filter(roomCreeps, s => s.memory.role == creepToSpawn);
-        if(anySpawned == undefined){
+        if(anySpawned[0] == undefined){
             return this.spawnCreep([WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,CARRY,MOVE,MOVE,MOVE,MOVE,MOVE], ('collectorTwo'+Math.floor(Math.random()*1000)), {memory: {role: creepToSpawn, home: this.room.name, sourceID: this.memory.rmSource0, containerID: this.memory.rmContainer0, depositID: this.memory.rmDeposit0}});
         } else if(anySpawned[0].memory.sourceID == this.memory.rmSource0) {
             return this.spawnCreep([WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,CARRY,MOVE,MOVE,MOVE,MOVE,MOVE], ('collectorTwo'+Math.floor(Math.random()*1000)), {memory: {role: creepToSpawn, home: this.room.name, sourceID: this.memory.rmSource1, containerID: this.memory.rmContainer1, depositID: this.memory.rmDeposit1}});
@@ -175,85 +168,85 @@ StructureSpawn.prototype.farMinerTwoSpawn =
         if(this.memory.exRm1 != undefined){
             if(this.memory.exRm1SourceID1 == undefined){
                 var anySpawned = _.filter(roomCreeps, s => s.memory.role == creepToSpawn && s.memory.target == this.memory.exRm1);
-                if(anySpawned == undefined){
-                    return this.spawnCreep([WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,CARRY,MOVE,MOVE,MOVE,MOVE,MOVE], ('farMinerTwo'+Math.floor(Math.random()*1000)), {memory: {role: creepToSpawn, home: this.room.name, target: this.memory.exRm1, sourceID: this.memory.exRm1Source0, containerID: this.memory.exRm1Container0, depositID: this.memory.exRm1DepositID0}});
+                if(anySpawned[0] == undefined){
+                    return this.spawnCreep([WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,CARRY,MOVE,MOVE,MOVE,MOVE,MOVE], ('farMinerTwo'+Math.floor(Math.random()*1000)), {memory: {role: creepToSpawn, home: this.room.name, target: this.memory.exRm1, sourceID: this.memory.exRm1SourceID0, containerID: this.memory.exRm1ContainerID0, deposit: this.memory.exRm1Deposit0}});
                 }
             } else{
                 var anySpawned = _.filter(roomCreeps, s => s.memory.role == creepToSpawn && s.memory.target == this.memory.exRm1);
-                if(anySpawned == undefined){
-                    return this.spawnCreep([WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,CARRY,MOVE,MOVE,MOVE,MOVE,MOVE], ('farMinerTwo'+Math.floor(Math.random()*1000)), {memory: {role: creepToSpawn, home: this.room.name, target: this.memory.exRm1, sourceID: this.memory.exRm1Source0, containerID: this.memory.exRm1Container0, depositID: this.memory.exRm1DepositID0}});
-                } else if(anySpawned[0].memory.sourceID == this.memory.ExRm1Source0) {
-                    return this.spawnCreep([WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,CARRY,MOVE,MOVE,MOVE,MOVE,MOVE], ('farMinerTwo'+Math.floor(Math.random()*1000)), {memory: {role: creepToSpawn, home: this.room.name, target: this.memory.exRm1, sourceID: this.memory.exRm1Source1, containerID: this.memory.exRm1RmContainer1, depositID: this.memory.exRm1DepositID0}});
-                } else{
-                    return this.spawnCreep([WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,CARRY,MOVE,MOVE,MOVE,MOVE,MOVE], ('farMinerTwo'+Math.floor(Math.random()*1000)), {memory: {role: creepToSpawn, home: this.room.name, target: this.memory.exRm1, sourceID: this.memory.exRm1Source0, containerID: this.memory.exRm1Container0, depositID: this.memory.exRm1DepositID0}});
+                if(anySpawned[0] == undefined){
+                    return this.spawnCreep([WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,CARRY,MOVE,MOVE,MOVE,MOVE,MOVE], ('farMinerTwo'+Math.floor(Math.random()*1000)), {memory: {role: creepToSpawn, home: this.room.name, target: this.memory.exRm1, sourceID: this.memory.exRm1SourceID0, containerID: this.memory.exRm1ContainerID0, deposit: this.memory.exRm1Deposit0}});
+                } else if(anySpawned[0].memory.sourceID == this.memory.exRm1SourceID0 && anySpawned.length < 2) {
+                    return this.spawnCreep([WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,CARRY,MOVE,MOVE,MOVE,MOVE,MOVE], ('farMinerTwo'+Math.floor(Math.random()*1000)), {memory: {role: creepToSpawn, home: this.room.name, target: this.memory.exRm1, sourceID: this.memory.exRm1SourceID1, containerID: this.memory.exRm1ContainerID1, deposit: this.memory.exRm1Deposit0}});
+                } else if(anySpawned[0].memory.sourceID == this.memory.exRm1SourceID1 && anySpawned.length < 2){
+                    return this.spawnCreep([WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,CARRY,MOVE,MOVE,MOVE,MOVE,MOVE], ('farMinerTwo'+Math.floor(Math.random()*1000)), {memory: {role: creepToSpawn, home: this.room.name, target: this.memory.exRm1, sourceID: this.memory.exRm1SourceID0, containerID: this.memory.exRm1ContainerID0, deposit: this.memory.exRm1Deposit0}});
                 }
             }
         }
         if(this.memory.exRm2 != undefined){
             if(this.memory.exRm2SourceID1 == undefined){
                 var anySpawned = _.filter(roomCreeps, s => s.memory.role == creepToSpawn && s.memory.target == this.memory.exRm2);
-                if(anySpawned == undefined){
-                    return this.SpawnCreep(body, ('conTranTwo'+Math.floor(Math.random()*1000)), {memory: {role: creepToSpawn, home: this.room.name, target: this.memory.exRm2, containerID: this.memory.exRm2Container0, depositID: this.memory.exRm2DepositID0}})
+                if(anySpawned[0] == undefined){
+                    return this.spawnCreep([WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,CARRY,MOVE,MOVE,MOVE,MOVE,MOVE], ('farMinerTwo'+Math.floor(Math.random()*1000)), {memory: {role: creepToSpawn, home: this.room.name, target: this.memory.exRm2, sourceID: this.memory.exRm2SourceID0, containerID: this.memory.exRm2ContainerID0, deposit: this.memory.exRm2Deposit0}});
                 }
             } else{
                 var anySpawned = _.filter(roomCreeps, s => s.memory.role == creepToSpawn && s.memory.target == this.memory.exRm2);
-                if(anySpawned == undefined){
-                    return this.SpawnCreep(body, ('conTranTwo'+Math.floor(Math.random()*1000)), {memory: {role: creepToSpawn, home: this.room.name, target: this.memory.exRm2, containerID: this.memory.exRm2Container0, depositID: this.memory.exRm2DepositID0}})
-                } else if(anySpawned[0].memory.containerID == this.memory.exRm2Container0) {
-                    return this.SpawnCreep(body, ('conTranTwo'+Math.floor(Math.random()*1000)), {memory: {role: creepToSpawn, home: this.room.name, target: this.memory.exRm2, containerID: this.memory.exRm2Container1, depositID: this.memory.exRm2DepositID0}})
-                } else{
-                    return this.SpawnCreep(body, ('conTranTwo'+Math.floor(Math.random()*1000)), {memory: {role: creepToSpawn, home: this.room.name, target: this.memory.exRm2, containerID: this.memory.exRm2Container0, depositID: this.memory.exRm2DepositID0}})
+                if(anySpawned[0] == undefined){
+                    return this.spawnCreep([WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,CARRY,MOVE,MOVE,MOVE,MOVE,MOVE], ('farMinerTwo'+Math.floor(Math.random()*1000)), {memory: {role: creepToSpawn, home: this.room.name, target: this.memory.exRm2, sourceID: this.memory.exRm2SourceID0, containerID: this.memory.exRm2ContainerID0, deposit: this.memory.exRm2Deposit0}});
+                } else if(anySpawned[0].memory.sourceID == this.memory.exRm2SourceID0 && anySpawned.length < 2) {
+                    return this.spawnCreep([WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,CARRY,MOVE,MOVE,MOVE,MOVE,MOVE], ('farMinerTwo'+Math.floor(Math.random()*1000)), {memory: {role: creepToSpawn, home: this.room.name, target: this.memory.exRm2, sourceID: this.memory.exRm2SourceID1, containerID: this.memory.exRm2ContainerID1, deposit: this.memory.exRm2Deposit0}});
+                } else if(anySpawned[0].memory.sourceID == this.memory.exRm2SourceID1 && anySpawned.length < 2){
+                    return this.spawnCreep([WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,CARRY,MOVE,MOVE,MOVE,MOVE,MOVE], ('farMinerTwo'+Math.floor(Math.random()*1000)), {memory: {role: creepToSpawn, home: this.room.name, target: this.memory.exRm2, sourceID: this.memory.exRm2SourceID0, containerID: this.memory.exRm2ContainerID0, deposit: this.memory.exRm2Deposit0}});
                 }
             }
         }
         if(this.memory.exRm3 != undefined){
             if(this.memory.exRm3SourceID1 == undefined){
                 var anySpawned = _.filter(roomCreeps, s => s.memory.role == creepToSpawn && s.memory.target == this.memory.exRm3);
-                if(anySpawned == undefined){
-                    return this.spawnCreep([WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,CARRY,MOVE,MOVE,MOVE,MOVE,MOVE], ('farMinerTwo'+Math.floor(Math.random()*1000)), {memory: {role: creepToSpawn, home: this.room.name, target: this.memory.exRm3, sourceID: this.memory.exRm3Source0, containerID: this.memory.exRm3Container0, depositID: this.memory.exRm3DepositID0}});
+                if(anySpawned[0] == undefined){
+                    return this.spawnCreep([WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,CARRY,MOVE,MOVE,MOVE,MOVE,MOVE], ('farMinerTwo'+Math.floor(Math.random()*1000)), {memory: {role: creepToSpawn, home: this.room.name, target: this.memory.exRm3, sourceID: this.memory.exRm3SourceID0, containerID: this.memory.exRm3ContainerID0, deposit: this.memory.exRm3Deposit0}});
                 }
             } else{
                 var anySpawned = _.filter(roomCreeps, s => s.memory.role == creepToSpawn && s.memory.target == this.memory.exRm3);
-                if(anySpawned == undefined){
-                    return this.spawnCreep([WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,CARRY,MOVE,MOVE,MOVE,MOVE,MOVE], ('farMinerTwo'+Math.floor(Math.random()*1000)), {memory: {role: creepToSpawn, home: this.room.name, target: this.memory.exRm3, sourceID: this.memory.exRm3Source0, containerID: this.memory.exRm3Container0, depositID: this.memory.exRm3DepositID0}});
-                } else if(anySpawned[0].memory.sourceID == this.memory.exRm3Source0) {
-                    return this.spawnCreep([WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,CARRY,MOVE,MOVE,MOVE,MOVE,MOVE], ('farMinerTwo'+Math.floor(Math.random()*1000)), {memory: {role: creepToSpawn, home: this.room.name, target: this.memory.exRm3, sourceID: this.memory.exRm3Source1, containerID: this.memory.exRm3RmContainer1, depositID: this.memory.exRm3DepositID0}});
-                } else{
-                    return this.spawnCreep([WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,CARRY,MOVE,MOVE,MOVE,MOVE,MOVE], ('farMinerTwo'+Math.floor(Math.random()*1000)), {memory: {role: creepToSpawn, home: this.room.name, target: this.memory.exRm3, sourceID: this.memory.exRm3Source0, containerID: this.memory.exRm3Container0, depositID: this.memory.exRm3DepositID0}});
+                if(anySpawned[0] == undefined){
+                    return this.spawnCreep([WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,CARRY,MOVE,MOVE,MOVE,MOVE,MOVE], ('farMinerTwo'+Math.floor(Math.random()*1000)), {memory: {role: creepToSpawn, home: this.room.name, target: this.memory.exRm3, sourceID: this.memory.exRm3SourceID0, containerID: this.memory.exRm3ContainerID0, deposit: this.memory.exRm3Deposit0}});
+                } else if(anySpawned[0].memory.sourceID == this.memory.exRm3SourceID0 && anySpawned.length < 2) {
+                    return this.spawnCreep([WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,CARRY,MOVE,MOVE,MOVE,MOVE,MOVE], ('farMinerTwo'+Math.floor(Math.random()*1000)), {memory: {role: creepToSpawn, home: this.room.name, target: this.memory.exRm3, sourceID: this.memory.exRm3SourceID1, containerID: this.memory.exRm3ContainerID1, deposit: this.memory.exRm3Deposit0}});
+                } else if(anySpawned[0].memory.sourceID == this.memory.exRm3SourceID1 && anySpawned.length < 2){
+                    return this.spawnCreep([WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,CARRY,MOVE,MOVE,MOVE,MOVE,MOVE], ('farMinerTwo'+Math.floor(Math.random()*1000)), {memory: {role: creepToSpawn, home: this.room.name, target: this.memory.exRm3, sourceID: this.memory.exRm3SourceID0, containerID: this.memory.exRm3ContainerID0, deposit: this.memory.exRm3Deposit0}});
                 }
             }
         }
         if(this.memory.exRm4 != undefined){
             if(this.memory.exRm4SourceID1 == undefined){
                 var anySpawned = _.filter(roomCreeps, s => s.memory.role == creepToSpawn && s.memory.target == this.memory.exRm4);
-                if(anySpawned == undefined){
-                    return this.spawnCreep([WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,CARRY,MOVE,MOVE,MOVE,MOVE,MOVE], ('farMinerTwo'+Math.floor(Math.random()*1000)), {memory: {role: creepToSpawn, home: this.room.name, target: this.memory.exRm4, sourceID: this.memory.exRm4Source0, containerID: this.memory.exRm4Container0, depositID: this.memory.exRm4DepositID0}});
+                if(anySpawned[0] == undefined){
+                    return this.spawnCreep([WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,CARRY,MOVE,MOVE,MOVE,MOVE,MOVE], ('farMinerTwo'+Math.floor(Math.random()*1000)), {memory: {role: creepToSpawn, home: this.room.name, target: this.memory.exRm4, sourceID: this.memory.exRm4SourceID0, containerID: this.memory.exRm4ContainerID0, deposit: this.memory.exRm4Deposit0}});
                 }
             } else{
                 var anySpawned = _.filter(roomCreeps, s => s.memory.role == creepToSpawn && s.memory.target == this.memory.exRm4);
-                if(anySpawned == undefined){
-                    return this.spawnCreep([WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,CARRY,MOVE,MOVE,MOVE,MOVE,MOVE], ('farMinerTwo'+Math.floor(Math.random()*1000)), {memory: {role: creepToSpawn, home: this.room.name, target: this.memory.exRm4, sourceID: this.memory.exRm4Source0, containerID: this.memory.exRm4Container0, depositID: this.memory.exRm4DepositID0}});
-                } else if(anySpawned[0].memory.sourceID == this.memory.exRm4Source0) {
-                    return this.spawnCreep([WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,CARRY,MOVE,MOVE,MOVE,MOVE,MOVE], ('farMinerTwo'+Math.floor(Math.random()*1000)), {memory: {role: creepToSpawn, home: this.room.name, target: this.memory.exRm4, sourceID: this.memory.exRm4Source1, containerID: this.memory.exRm4RmContainer1, depositID: this.memory.exRm4DepositID0}});
-                } else{
-                    return this.spawnCreep([WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,CARRY,MOVE,MOVE,MOVE,MOVE,MOVE], ('farMinerTwo'+Math.floor(Math.random()*1000)), {memory: {role: creepToSpawn, home: this.room.name, target: this.memory.exRm4, sourceID: this.memory.exRm4Source0, containerID: this.memory.exRm4Container0, depositID: this.memory.exRm4DepositID0}});
+                if(anySpawned[0] == undefined){
+                    return this.spawnCreep([WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,CARRY,MOVE,MOVE,MOVE,MOVE,MOVE], ('farMinerTwo'+Math.floor(Math.random()*1000)), {memory: {role: creepToSpawn, home: this.room.name, target: this.memory.exRm4, sourceID: this.memory.exRm4SourceID0, containerID: this.memory.exRm4ContainerID0, deposit: this.memory.exRm4Deposit0}});
+                } else if(anySpawned[0].memory.sourceID == this.memory.exRm4SourceID0 && anySpawned.length < 2) {
+                    return this.spawnCreep([WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,CARRY,MOVE,MOVE,MOVE,MOVE,MOVE], ('farMinerTwo'+Math.floor(Math.random()*1000)), {memory: {role: creepToSpawn, home: this.room.name, target: this.memory.exRm4, sourceID: this.memory.exRm4SourceID1, containerID: this.memory.exRm4ContainerID1, deposit: this.memory.exRm4Deposit0}});
+                } else if(anySpawned[0].memory.sourceID == this.memory.exRm4SourceID1 && anySpawned.length < 2){
+                    return this.spawnCreep([WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,CARRY,MOVE,MOVE,MOVE,MOVE,MOVE], ('farMinerTwo'+Math.floor(Math.random()*1000)), {memory: {role: creepToSpawn, home: this.room.name, target: this.memory.exRm4, sourceID: this.memory.exRm4SourceID0, containerID: this.memory.exRm4ContainerID0, deposit: this.memory.exRm4Deposit0}});
                 }
             }
         }
         if(this.memory.exRm5 != undefined){
             if(this.memory.exRm5SourceID1 == undefined){
                 var anySpawned = _.filter(roomCreeps, s => s.memory.role == creepToSpawn && s.memory.target == this.memory.exRm5);
-                if(anySpawned == undefined){
-                    return this.spawnCreep([WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,CARRY,MOVE,MOVE,MOVE,MOVE,MOVE], ('farMinerTwo'+Math.floor(Math.random()*1000)), {memory: {role: creepToSpawn, home: this.room.name, target: this.memory.exRm5, sourceID: this.memory.exRm5Source0, containerID: this.memory.exRm5Container0, depositID: this.memory.exRm5DepositID0}});
+                if(anySpawned[0] == undefined){
+                    return this.spawnCreep([WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,CARRY,MOVE,MOVE,MOVE,MOVE,MOVE], ('farMinerTwo'+Math.floor(Math.random()*1000)), {memory: {role: creepToSpawn, home: this.room.name, target: this.memory.exRm5, sourceID: this.memory.exRm5SourceID0, containerID: this.memory.exRm5ContainerID0, deposit: this.memory.exRm5Deposit0}});
                 }
             } else{
                 var anySpawned = _.filter(roomCreeps, s => s.memory.role == creepToSpawn && s.memory.target == this.memory.exRm5);
-                if(anySpawned == undefined){
-                    return this.spawnCreep([WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,CARRY,MOVE,MOVE,MOVE,MOVE,MOVE], ('farMinerTwo'+Math.floor(Math.random()*1000)), {memory: {role: creepToSpawn, home: this.room.name, target: this.memory.exRm5, sourceID: this.memory.exRm5Source0, containerID: this.memory.exRm5Container0, depositID: this.memory.exRm5DepositID0}});
-                } else if(anySpawned[0].memory.sourceID == this.memory.exRm5Source0) {
-                    return this.spawnCreep([WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,CARRY,MOVE,MOVE,MOVE,MOVE,MOVE], ('farMinerTwo'+Math.floor(Math.random()*1000)), {memory: {role: creepToSpawn, home: this.room.name, target: this.memory.exRm5, sourceID: this.memory.exRm5Source1, containerID: this.memory.exRm5RmContainer1, depositID: this.memory.exRm5DepositID0}});
-                } else{
-                    return this.spawnCreep([WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,CARRY,MOVE,MOVE,MOVE,MOVE,MOVE], ('farMinerTwo'+Math.floor(Math.random()*1000)), {memory: {role: creepToSpawn, home: this.room.name, target: this.memory.exRm5, sourceID: this.memory.exRm5Source0, containerID: this.memory.exRm5Container0, depositID: this.memory.exRm5DepositID0}});
+                if(anySpawned[0] == undefined){
+                    return this.spawnCreep([WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,CARRY,MOVE,MOVE,MOVE,MOVE,MOVE], ('farMinerTwo'+Math.floor(Math.random()*1000)), {memory: {role: creepToSpawn, home: this.room.name, target: this.memory.exRm5, sourceID: this.memory.exRm5SourceID0, containerID: this.memory.exRm5ContainerID0, deposit: this.memory.exRm5Deposit0}});
+                } else if(anySpawned[0].memory.sourceID == this.memory.exRm5SourceID0 && anySpawned.length < 2) {
+                    return this.spawnCreep([WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,CARRY,MOVE,MOVE,MOVE,MOVE,MOVE], ('farMinerTwo'+Math.floor(Math.random()*1000)), {memory: {role: creepToSpawn, home: this.room.name, target: this.memory.exRm5, sourceID: this.memory.exRm5SourceID1, containerID: this.memory.exRm5ContainerID1, deposit: this.memory.exRm5Deposit0}});
+                } else if(anySpawned[0].memory.sourceID == this.memory.exRm5SourceID1 && anySpawned.length < 2){
+                    return this.spawnCreep([WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,CARRY,MOVE,MOVE,MOVE,MOVE,MOVE], ('farMinerTwo'+Math.floor(Math.random()*1000)), {memory: {role: creepToSpawn, home: this.room.name, target: this.memory.exRm5, sourceID: this.memory.exRm5SourceID0, containerID: this.memory.exRm5ContainerID0, deposit: this.memory.exRm5Deposit0}});
                 }
             }
         }
@@ -273,7 +266,7 @@ StructureSpawn.prototype.upgradeSpawn =
             body.push(WORK);
             body.push(MOVE);
         }
-        return this.spawnCreep(body,('upgrader'+Math.floor(Math.random()*1000)),{memory: {role: 'upgrader', home: this.room.name}});
+        return this.spawnCreep(body,('upgrader'+Math.floor(Math.random()*1000)),{memory: {role: 'upgrader', home: this.room.name, bstLab: this.memory.bstLab, boosted: this.memory.boosted}});
     }
     
 StructureSpawn.prototype.defenderSpawn = 
@@ -330,9 +323,27 @@ StructureSpawn.prototype.workerSpawn =
         }
         return this.spawnCreep(body, (creepToSpawn + Math.floor(Math.random()*1000)), {memory: {role: creepToSpawn, home: this.room.name}})
     }
+    
+StructureSpawn.prototype.farBuilderSpawn = 
+    function(creepToSpawn) {
+        var parts = Math.floor(this.room.energyAvailable / 400);
+        parts = Math.min(parts, Math.floor(50/6));
+        var body = [];
+        
+        for(let i = 0; i < parts; i++){
+            body.push(WORK);
+            body.push(WORK);
+            body.push(CARRY);
+            body.push(MOVE);
+            body.push(MOVE);
+            body.push(MOVE);
+        }
+        return this.spawnCreep(body, (creepToSpawn + Math.floor(Math.random()*1000)), {memory: {role: creepToSpawn, home: this.room.name, target: this.memory.farBuilderTgt, working: false}})
+    }
+    
 
 StructureSpawn.prototype.conTranTwoSpawn = 
-    function() {
+    function(roomCreeps, creepToSpawn) {
         var parts = Math.floor((this.room.energyAvailable - 150) / 150);
         parts = Math.min(parts, Math.floor(48/3));
         var body = [];
@@ -347,85 +358,85 @@ StructureSpawn.prototype.conTranTwoSpawn =
         if(this.memory.exRm1 != undefined){
             if(this.memory.exRm1SourceID1 == undefined){
                 var anySpawned = _.filter(roomCreeps, s => s.memory.role == creepToSpawn && s.memory.target == this.memory.exRm1);
-                if(anySpawned == undefined){
-                    return this.SpawnCreep(body, ('conTranTwo'+Math.floor(Math.random()*1000)), {memory: {role: creepToSpawn, home: this.room.name, target: this.memory.exRm1, containerID: this.memory.exRm1Container0, depositID: this.memory.exRm1DepositID0}})
+                if(anySpawned[0] == undefined){
+                    return this.spawnCreep(body, ('conTranTwo'+Math.floor(Math.random()*1000)), {memory: {role: creepToSpawn, home: this.room.name, target: this.memory.exRm1, containerID: this.memory.exRm1ContainerID0, deposit: this.memory.exRm1Deposit0}})
                 }
             } else{
                 var anySpawned = _.filter(roomCreeps, s => s.memory.role == creepToSpawn && s.memory.target == this.memory.exRm1);
-                if(anySpawned == undefined){
-                    return this.SpawnCreep(body, ('conTranTwo'+Math.floor(Math.random()*1000)), {memory: {role: creepToSpawn, home: this.room.name, target: this.memory.exRm1, containerID: this.memory.exRm1Container0, depositID: this.memory.exRm1DepositID0}})
-                } else if(anySpawned[0].memory.containerID == this.memory.ExRm1Container0) {
-                    return this.SpawnCreep(body, ('conTranTwo'+Math.floor(Math.random()*1000)), {memory: {role: creepToSpawn, home: this.room.name, target: this.memory.exRm1, containerID: this.memory.exRm1Container1, depositID: this.memory.exRm1DepositID0}})
-                } else{
-                    return this.SpawnCreep(body, ('conTranTwo'+Math.floor(Math.random()*1000)), {memory: {role: creepToSpawn, home: this.room.name, target: this.memory.exRm1, containerID: this.memory.exRm1Container0, depositID: this.memory.exRm1DepositID0}})
+                if(anySpawned[0] == undefined){
+                    return this.spawnCreep(body, ('conTranTwo'+Math.floor(Math.random()*1000)), {memory: {role: creepToSpawn, home: this.room.name, target: this.memory.exRm1, containerID: this.memory.exRm1ContainerID0, deposit: this.memory.exRm1Deposit0}})
+                } else if(anySpawned[0].memory.containerID == this.memory.exRm1ContainerID0 && anySpawned.length < 2) {
+                    return this.spawnCreep(body, ('conTranTwo'+Math.floor(Math.random()*1000)), {memory: {role: creepToSpawn, home: this.room.name, target: this.memory.exRm1, containerID: this.memory.exRm1ContainerID1, deposit: this.memory.exRm1Deposit0}})
+                } else if(anySpawned[0].memory.containerID == this.memory.exRm1ContainerID1 && anySpawned.length < 2){
+                    return this.spawnCreep(body, ('conTranTwo'+Math.floor(Math.random()*1000)), {memory: {role: creepToSpawn, home: this.room.name, target: this.memory.exRm1, containerID: this.memory.exRm1ContainerID0, deposit: this.memory.exRm1Deposit0}})
                 }
             }
         }
         if(this.memory.exRm2 != undefined){
             if(this.memory.exRm2SourceID1 == undefined){
                 var anySpawned = _.filter(roomCreeps, s => s.memory.role == creepToSpawn && s.memory.target == this.memory.exRm2);
-                if(anySpawned == undefined){
-                    return this.SpawnCreep(body, ('conTranTwo'+Math.floor(Math.random()*1000)), {memory: {role: creepToSpawn, home: this.room.name, target: this.memory.exRm1, containerID: this.memory.exRm1Container0, depositID: this.memory.exRm1DepositID0}})
+                if(anySpawned[0] == undefined){
+                    return this.spawnCreep(body, ('conTranTwo'+Math.floor(Math.random()*1000)), {memory: {role: creepToSpawn, home: this.room.name, target: this.memory.exRm2, containerID: this.memory.exRm2ContainerID0, deposit: this.memory.exRm2Deposit0}})
                 }
             } else{
                 var anySpawned = _.filter(roomCreeps, s => s.memory.role == creepToSpawn && s.memory.target == this.memory.exRm2);
-                if(anySpawned == undefined){
-                    return this.SpawnCreep(body, ('conTranTwo'+Math.floor(Math.random()*1000)), {memory: {role: creepToSpawn, home: this.room.name, target: this.memory.exRm1, containerID: this.memory.exRm1Container0, depositID: this.memory.exRm1DepositID0}})
-                } else if(anySpawned[0].memory.containerID == this.memory.exRm2Container0) {
-                    return this.SpawnCreep(body, ('conTranTwo'+Math.floor(Math.random()*1000)), {memory: {role: creepToSpawn, home: this.room.name, target: this.memory.exRm1, containerID: this.memory.exRm1Container1, depositID: this.memory.exRm1DepositID0}})
-                } else{
-                    return this.SpawnCreep(body, ('conTranTwo'+Math.floor(Math.random()*1000)), {memory: {role: creepToSpawn, home: this.room.name, target: this.memory.exRm1, containerID: this.memory.exRm1Container0, depositID: this.memory.exRm1DepositID0}})
+                if(anySpawned[0] == undefined){
+                    return this.spawnCreep(body, ('conTranTwo'+Math.floor(Math.random()*1000)), {memory: {role: creepToSpawn, home: this.room.name, target: this.memory.exRm2, containerID: this.memory.exRm2ContainerID0, deposit: this.memory.exRm2Deposit0}})
+                } else if(anySpawned[0].memory.containerID == this.memory.exRm2ContainerID0 && anySpawned.length < 2) {
+                    return this.spawnCreep(body, ('conTranTwo'+Math.floor(Math.random()*1000)), {memory: {role: creepToSpawn, home: this.room.name, target: this.memory.exRm2, containerID: this.memory.exRm2ContainerID1, deposit: this.memory.exRm2Deposit0}})
+                } else if(anySpawned[0].memory.containerID == this.memory.exRm2ContainerID1 && anySpawned.length < 2){
+                    return this.spawnCreep(body, ('conTranTwo'+Math.floor(Math.random()*1000)), {memory: {role: creepToSpawn, home: this.room.name, target: this.memory.exRm2, containerID: this.memory.exRm2ContainerID0, deposit: this.memory.exRm2Deposit0}})
                 }
             }
         }
         if(this.memory.exRm3 != undefined){
             if(this.memory.exRm3SourceID1 == undefined){
                 var anySpawned = _.filter(roomCreeps, s => s.memory.role == creepToSpawn && s.memory.target == this.memory.exRm3);
-                if(anySpawned == undefined){
-                    return this.SpawnCreep(body, ('conTranTwo'+Math.floor(Math.random()*1000)), {memory: {role: creepToSpawn, home: this.room.name, target: this.memory.exRm3, containerID: this.memory.exRm3Container0, depositID: this.memory.exRm3DepositID0}})
+                if(anySpawned[0] == undefined){
+                    return this.spawnCreep(body, ('conTranTwo'+Math.floor(Math.random()*1000)), {memory: {role: creepToSpawn, home: this.room.name, target: this.memory.exRm3, containerID: this.memory.exRm3ContainerID0, deposit: this.memory.exRm3Deposit0}})
                 }
             } else{
                 var anySpawned = _.filter(roomCreeps, s => s.memory.role == creepToSpawn && s.memory.target == this.memory.exRm3);
-                if(anySpawned == undefined){
-                    return this.SpawnCreep(body, ('conTranTwo'+Math.floor(Math.random()*1000)), {memory: {role: creepToSpawn, home: this.room.name, target: this.memory.exRm3, containerID: this.memory.exRm3Container0, depositID: this.memory.exRm3DepositID0}})
-                } else if(anySpawned[0].memory.containerID == this.memory.exRm3Container0) {
-                    return this.SpawnCreep(body, ('conTranTwo'+Math.floor(Math.random()*1000)), {memory: {role: creepToSpawn, home: this.room.name, target: this.memory.exRm3, containerID: this.memory.exRm3Container1, depositID: this.memory.exRm3DepositID0}})
-                } else{
-                    return this.SpawnCreep(body, ('conTranTwo'+Math.floor(Math.random()*1000)), {memory: {role: creepToSpawn, home: this.room.name, target: this.memory.exRm3, containerID: this.memory.exRm3Container0, depositID: this.memory.exRm3DepositID0}})
+                if(anySpawned[0] == undefined){
+                    return this.spawnCreep(body, ('conTranTwo'+Math.floor(Math.random()*1000)), {memory: {role: creepToSpawn, home: this.room.name, target: this.memory.exRm3, containerID: this.memory.exRm3ContainerID0, deposit: this.memory.exRm3Deposit0}})
+                } else if(anySpawned[0].memory.containerID == this.memory.exRm3ContainerID0 && anySpawned.length < 2) {
+                    return this.spawnCreep(body, ('conTranTwo'+Math.floor(Math.random()*1000)), {memory: {role: creepToSpawn, home: this.room.name, target: this.memory.exRm3, containerID: this.memory.exRm3ContainerID1, deposit: this.memory.exRm3Deposit0}})
+                } else if(anySpawned[0].memory.containerID == this.memory.exRm3ContainerID1 && anySpawned.length < 2){
+                    return this.spawnCreep(body, ('conTranTwo'+Math.floor(Math.random()*1000)), {memory: {role: creepToSpawn, home: this.room.name, target: this.memory.exRm3, containerID: this.memory.exRm3ContainerID0, deposit: this.memory.exRm3Deposit0}})
                 }
             }
         }
         if(this.memory.exRm4 != undefined){
             if(this.memory.exRm4SourceID1 == undefined){
                 var anySpawned = _.filter(roomCreeps, s => s.memory.role == creepToSpawn && s.memory.target == this.memory.exRm4);
-                if(anySpawned == undefined){
-                    return this.SpawnCreep(body, ('conTranTwo'+Math.floor(Math.random()*1000)), {memory: {role: creepToSpawn, home: this.room.name, target: this.memory.exRm4, containerID: this.memory.exRm4Container0, depositID: this.memory.exRm4DepositID0}})
+                if(anySpawned[0] == undefined){
+                    return this.spawnCreep(body, ('conTranTwo'+Math.floor(Math.random()*1000)), {memory: {role: creepToSpawn, home: this.room.name, target: this.memory.exRm4, containerID: this.memory.exRm4ContainerID0, deposit: this.memory.exRm4Deposit0}})
                 }
             } else{
                 var anySpawned = _.filter(roomCreeps, s => s.memory.role == creepToSpawn && s.memory.target == this.memory.exRm4);
-                if(anySpawned == undefined){
-                    return this.SpawnCreep(body, ('conTranTwo'+Math.floor(Math.random()*1000)), {memory: {role: creepToSpawn, home: this.room.name, target: this.memory.exRm4, containerID: this.memory.exRm4Container0, depositID: this.memory.exRm4DepositID0}})
-                } else if(anySpawned[0].memory.containerID == this.memory.exRm4Container0) {
-                    return this.SpawnCreep(body, ('conTranTwo'+Math.floor(Math.random()*1000)), {memory: {role: creepToSpawn, home: this.room.name, target: this.memory.exRm4, containerID: this.memory.exRm4Container1, depositID: this.memory.exRm4DepositID0}})
-                } else{
-                    return this.SpawnCreep(body, ('conTranTwo'+Math.floor(Math.random()*1000)), {memory: {role: creepToSpawn, home: this.room.name, target: this.memory.exRm4, containerID: this.memory.exRm4Container0, depositID: this.memory.exRm4DepositID0}})
+                if(anySpawned[0] == undefined){
+                    return this.spawnCreep(body, ('conTranTwo'+Math.floor(Math.random()*1000)), {memory: {role: creepToSpawn, home: this.room.name, target: this.memory.exRm4, containerID: this.memory.exRm4ContainerID0, deposit: this.memory.exRm4Deposit0}})
+                } else if(anySpawned[0].memory.containerID == this.memory.exRm4ContainerID0 && anySpawned.length < 2) {
+                    return this.spawnCreep(body, ('conTranTwo'+Math.floor(Math.random()*1000)), {memory: {role: creepToSpawn, home: this.room.name, target: this.memory.exRm4, containerID: this.memory.exRm4ContainerID1, deposit: this.memory.exRm4Deposit0}})
+                } else if(anySpawned[0].memory.containerID == this.memory.exRm4ContainerID1 && anySpawned.length < 2){
+                    return this.spawnCreep(body, ('conTranTwo'+Math.floor(Math.random()*1000)), {memory: {role: creepToSpawn, home: this.room.name, target: this.memory.exRm4, containerID: this.memory.exRm4ContainerID0, deposit: this.memory.exRm4Deposit0}})
                 }
             }
         }
         if(this.memory.exRm5 != undefined){
             if(this.memory.exRm5SourceID1 == undefined){
                 var anySpawned = _.filter(roomCreeps, s => s.memory.role == creepToSpawn && s.memory.target == this.memory.exRm5);
-                if(anySpawned == undefined){
-                    return this.SpawnCreep(body, ('conTranTwo'+Math.floor(Math.random()*1000)), {memory: {role: creepToSpawn, home: this.room.name, target: this.memory.exRm5, containerID: this.memory.exRm5Container0, depositID: this.memory.exRm5DepositID0}})
+                if(anySpawned[0] == undefined){
+                    return this.spawnCreep(body, ('conTranTwo'+Math.floor(Math.random()*1000)), {memory: {role: creepToSpawn, home: this.room.name, target: this.memory.exRm5, containerID: this.memory.exRm5ContainerID0, deposit: this.memory.exRm5Deposit0}})
                 }
             } else{
                 var anySpawned = _.filter(roomCreeps, s => s.memory.role == creepToSpawn && s.memory.target == this.memory.exRm5);
-                if(anySpawned == undefined){
-                    return this.SpawnCreep(body, ('conTranTwo'+Math.floor(Math.random()*1000)), {memory: {role: creepToSpawn, home: this.room.name, target: this.memory.exRm5, containerID: this.memory.exRm5Container0, depositID: this.memory.exRm5DepositID0}})
-                } else if(anySpawned[0].memory.containerID == this.memory.exRm5Container0) {
-                    return this.SpawnCreep(body, ('conTranTwo'+Math.floor(Math.random()*1000)), {memory: {role: creepToSpawn, home: this.room.name, target: this.memory.exRm5, containerID: this.memory.exRm5Container1, depositID: this.memory.exRm5DepositID0}})
-                } else{
-                    return this.SpawnCreep(body, ('conTranTwo'+Math.floor(Math.random()*1000)), {memory: {role: creepToSpawn, home: this.room.name, target: this.memory.exRm5, containerID: this.memory.exRm5Container0, depositID: this.memory.exRm5DepositID0}})
+                if(anySpawned[0] == undefined){
+                    return this.spawnCreep(body, ('conTranTwo'+Math.floor(Math.random()*1000)), {memory: {role: creepToSpawn, home: this.room.name, target: this.memory.exRm5, containerID: this.memory.exRm5ContainerID0, deposit: this.memory.exRm5Deposit0}})
+                } else if(anySpawned[0].memory.containerID == this.memory.exRm5ContainerID0 && anySpawned.length < 2) {
+                    return this.spawnCreep(body, ('conTranTwo'+Math.floor(Math.random()*1000)), {memory: {role: creepToSpawn, home: this.room.name, target: this.memory.exRm5, containerID: this.memory.exRm5ContainerID1, deposit: this.memory.exRm5Deposit0}})
+                } else if(anySpawned[0].memory.containerID == this.memory.exRm5ContainerID1 && anySpawned.length < 2){
+                    return this.spawnCreep(body, ('conTranTwo'+Math.floor(Math.random()*1000)), {memory: {role: creepToSpawn, home: this.room.name, target: this.memory.exRm5, containerID: this.memory.exRm5ContainerID0, deposit: this.memory.exRm5Deposit0}})
                 }
             }
         }

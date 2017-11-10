@@ -7,8 +7,10 @@ StructureLink.prototype.linkLogic =
     }
     
     
-    
+    if(linkTo[0] != undefined){
     if(linkTo[0].energy < linkTo[0].energyCapacity){
         this.transferEnergy(linkTo[0]);
+    }    
     }
+    
     }

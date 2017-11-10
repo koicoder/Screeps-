@@ -11,7 +11,7 @@ module.exports = {
                 }
             }
             if(creep.room.name == 'W72N32'){
-                creep.memory.target = 'W76N32';
+                creep.memory.target = 'W74N32';
             }
             if(creep.room.name == 'W70N34'){
                 creep.memory.target = 'W68N33';

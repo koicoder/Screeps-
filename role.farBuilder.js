@@ -10,7 +10,7 @@ run: function(creep) {
         creep.moveTo(creep.pos.findClosestByRange(exit));
     } else{
         if(creep.carry.energy < creep.carryCapacity && creep.memory.working == false) {
-                var container = creep.pos.findClosestByRange(FIND_STRUCTURES, { filter: (s) => s.structureType == STRUCTURE_CONTAINER && s.store[RESOURCE_ENERGY] >= 100});
+                var container = creep.pos.findClosestByRange(FIND_STRUCTURES, { filter: (s) => s.structureType == STRUCTURE_CONTAINER && s.store[RESOURCE_ENERGY] >= 100 && s.room.name != 'W54N37' || s.structureType == STRUCTURE_TERMINAL && s.store[RESOURCE_ENERGY] >= 100});
                 if(container != undefined){
                     if(creep.withdraw(container, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE){
                         creep.moveTo(container);
@@ -40,7 +40,7 @@ run: function(creep) {
     }
     }
     if(creep.room.name == 'W72N33'){
-                creep.memory.target = 'W76N32';
+                creep.memory.target = 'W74N32';
             }
     if(creep.room.name == 'W70N34'){
                 creep.memory.target = 'W68N33';
@@ -48,5 +48,9 @@ run: function(creep) {
     if(creep.room.name == 'W69N34'){
                 creep.moveTo(36,49)
             }
+    if(creep.room.name == 'W68N33'){
+            creep.moveTo(0,39)
+        }
     }
+    
 };

@@ -30,7 +30,8 @@ function () {
         case 1:
             obs.observeRoom('W63N39');
             obs2.observeRoom('W67N39');
-            obs3.observeRoom('W54N38');            
+            obs3.observeRoom('W54N38');
+            obs4.observeRoom('W69N33');            
             try{
                 this.memory.RES6338 = Game.rooms['W63N38'].controller.reservation['ticksToEnd'];
                 this.memory.RES7335 = Game.rooms['W73N35'].controller.reservation['ticksToEnd'];
@@ -75,10 +76,12 @@ function () {
         case 2:
             obs.observeRoom('W65N38');
             obs3.observeRoom('W53N37');
+            obs4.observeRoom('W77N32');            
             try{
                 this.memory.RES6339 = Game.rooms['W63N39'].controller.reservation['ticksToEnd'];
                 this.memory.RES6739 = Game.rooms['W67N39'].controller.reservation['ticksToEnd'];
                 this.memory.RES5438 = Game.rooms['W54N38'].controller.reservation['ticksToEnd'];
+                this.memory.RES6933 = Game.rooms['W69N33'].controller.reservation['ticksToEnd'];
                 var invFlg = Game.flags.INVRM6339;
                 var hostile = invFlg.pos.findClosestByRange(FIND_HOSTILE_CREEPS, {filter: { owner: { username: 'Invader' } }});
                 if(hostile != undefined){
@@ -93,9 +96,19 @@ function () {
                 } else{
                     invFlg2.memory.hostiles = false;
                 }
+                var invFlg4 = Game.flags.INVRM6933;
+                var hostile4 = invFlg4.pos.findClosestByRange(FIND_HOSTILE_CREEPS, {filter: { owner: { username: 'Invader' } }});
+                if(hostile4 != undefined){
+                    invFlg4.memory.hostiles = true;
+                } else{
+                    invFlg4.memory.hostiles = false;
+                }
             }
             catch(e){
                 this.memory.RES6339 = 1;
+                this.memory.RES6739 = 1;
+                this.memory.RES5438 = 1;
+                this.memory.RES6933 = 1;
             }
             this.memory.obsCounter = 3;
             break;
@@ -105,6 +118,7 @@ function () {
             try{
                 this.memory.RES6538 = Game.rooms['W65N38'].controller.reservation['ticksToEnd'];
                 this.memory.RES5337 = Game.rooms['W53N37'].controller.reservation['ticksToEnd'];
+                this.memory.RES7732 = Game.rooms['W77N32'].controller.reservation['ticksToEnd'];
                 var invFlg = Game.flags.INVRM6538;
                 var hostile = invFlg.pos.findClosestByRange(FIND_HOSTILE_CREEPS, {filter: { owner: { username: 'Invader' } }});
                 if(hostile != undefined){
@@ -119,9 +133,18 @@ function () {
                 } else{
                     invFlg1.memory.hostiles = false;
                 }
+                var invFlg4 = Game.flags.INVRM7732;
+                var hostile4 = invFlg4.pos.findClosestByRange(FIND_HOSTILE_CREEPS, {filter: { owner: { username: 'Invader' } }});
+                if(hostile4 != undefined){
+                    invFlg4.memory.hostiles = true;
+                } else{
+                    invFlg4.memory.hostiles = false;
+                }
             }
             catch(e){
                 this.memory.RES6538 = 1;
+                this.memory.RES5337 = 1;
+                this.memory.RES7732 = 1;
             }
             this.memory.obsCounter = 4;
             break;

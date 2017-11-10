@@ -1,22 +1,53 @@
-Game.spawns['Spawn22'].memory.rmSource0 = '57ef9cd886f108ae6e60ce67';
-Game.spawns['Spawn22'].memory.rmSource1 = '57ef9cd886f108ae6e60ce68';
-Game.spawns['Spawn22'].memory.rmContainer0 = '594316d5f4e5f28558258259';
-Game.spawns['Spawn22'].memory.rmContainer1 = '5941a11fe390c1d17c1771ea';
-Game.spawns['Spawn22'].memory.rmDeposit0 = '59487c260be3c3e16b057357';
-Game.spawns['Spawn22'].memory.rmDeposit1 = '59512d29375d592c4939c1a2';
-Game.spawns['Spawn22'].memory.exRm1 = 'W63N39';
-Game.spawns['Spawn22'].memory.exRm1Hostiles = false;
-Game.spawns['Spawn22'].memory.exRm1Claimer = false;
-Game.spawns['Spawn22'].memory.exRm1SourceID0 = '57ef9cc286f108ae6e60cc9d';
-Game.spawns['Spawn22'].memory.exRm1SourceID1;
-Game.spawns['Spawn22'].memory.exRm1ContainerID0 = '59a469b12d2aa2606fe20d97';
-Game.spawns['Spawn22'].memory.exRm1ContainerID1;
-Game.spawns['Spawn22'].memory.exRm1DepositID0 = '5954877d6d1e9153274d25d9';
-Game.spawns['Spawn22'].memory.exRm2 = 'W63N38';
-Game.spawns['Spawn22'].memory.exRm2Hostiles = false;
-Game.spawns['Spawn22'].memory.exRm2Claimer = false;
-Game.spawns['Spawn22'].memory.exRm2SourceID0 = '57ef9cc286f108ae6e60cca0';
-Game.spawns['Spawn22'].memory.exRm2SourceID1;
-Game.spawns['Spawn22'].memory.exRm2ContainerID0 = '59a46ca3bbf8450c23e5ff4e';
-Game.spawns['Spawn22'].memory.exRm2ContainerID1;
-Game.spawns['Spawn22'].memory.exRm2DepositID0 = '595ac12cbe708765b52eabe1';
+    var collectorsTwoRM9 = _.filter(Game.creeps, (creep) => creep.memory.role == 'collectorTwo' && creep.memory.home == 'W68N33' && creep.memory.sourceID == '57ef9c5b86f108ae6e60c166');
+    var collectorsTwoRM91 = _.filter(Game.creeps, (creep) => creep.memory.role == 'collectorTwo' && creep.memory.home == 'W68N33' && creep.memory.sourceID == '57ef9c5b86f108ae6e60c167');
+    var busesRM9 = _.filter(Game.creeps, (creep) => creep.memory.role == 'bus' && creep.memory.home == 'W68N33');
+    var sweepRM9 = _.filter(Game.creeps, (creep) => creep.memory.role == 'collectorTwo' && creep.memory.home == 'W68N33');
+    var upgraderRM9 = _.filter(Game.creeps, (creep) => creep.memory.role == 'upgrader' && creep.memory.home == 'W68N33');
+    var busTowerRM9 = _.filter(Game.creeps, (creep) => creep.memory.role == 'busTower' && creep.memory.home == 'W68N33');
+
+
+    if (collectorsTwoRM9.length < 1){
+        if(Game.spawns['Spawn9'].canCreateCreep() != ERR_BUSY){
+        var newName = Game.spawns['Spawn9'].createCreep([WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,CARRY,MOVE,MOVE,MOVE,MOVE,MOVE], undefined, {role: 'collectorTwo', sourceID: '57ef9c5b86f108ae6e60c166', home:'W68N33', containerID: '59fe9f07dacd4908b9fb38a5', depositID: '59f9e79b84ccf84a05db1cc7'});
+        }
+    } else if (collectorsTwoRM91.length < 1){
+        if(Game.spawns['Spawn9'].canCreateCreep() != ERR_BUSY){
+        var newName = Game.spawns['Spawn9'].createCreep([WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,CARRY,MOVE,MOVE,MOVE,MOVE,MOVE], undefined, {role: 'collectorTwo', sourceID: '57ef9c5b86f108ae6e60c167', home:'W68N33', containerID: '59feaa7568b3ca3cececc598', depositID: '59f9e1a7213866612a41d78c'});
+        }
+    } else if (busesRM9.length < 1){
+        if(Game.spawns['Spawn9'].room.energyAvailable > 3000){
+            if(Game.spawns['Spawn9'].canCreateCreep() != ERR_BUSY){
+                var newName = Game.spawns['Spawn9'].createCreep([CARRY,CARRY,MOVE,CARRY,CARRY,MOVE,CARRY,CARRY,MOVE,CARRY,CARRY,MOVE,CARRY,CARRY,MOVE,CARRY,CARRY,MOVE,CARRY,CARRY,MOVE,CARRY,CARRY,MOVE,CARRY,CARRY,MOVE,CARRY,CARRY,MOVE,CARRY,CARRY,MOVE,CARRY,CARRY,MOVE,CARRY,CARRY,MOVE,CARRY,CARRY,MOVE,CARRY,CARRY,MOVE,CARRY,CARRY,MOVE,CARRY,MOVE], undefined, {role: 'bus', home: 'W68N33'});
+            }     
+        } else if(Game.spawns['Spawn9'].room.energyAvailable < 400){
+            if(Game.spawns['Spawn9'].canCreateCreep() != ERR_BUSY){
+                var newName = Game.spawns['Spawn9'].createCreep([CARRY,CARRY,MOVE,CARRY,CARRY,MOVE], undefined, {role: 'bus', home: 'W68N33'});
+            }
+        } else {
+            if(Game.spawns['Spawn9'].canCreateCreep() != ERR_BUSY){
+                var newName = Game.spawns['Spawn9'].createCreep([CARRY,CARRY,MOVE,CARRY,CARRY,MOVE,CARRY,CARRY,MOVE,CARRY,CARRY,MOVE,CARRY,CARRY,MOVE,CARRY,CARRY,MOVE,CARRY,CARRY,MOVE,CARRY,CARRY,MOVE], undefined, {role: 'bus', home: 'W68N33'});
+            }
+        }
+    } else if (busTowerRM9.length < 1){
+        if(Game.spawns['Spawn9'].room.energyAvailable > 3000){
+            if(Game.spawns['Spawn9'].canCreateCreep() != ERR_BUSY){
+                var newName = Game.spawns['Spawn9'].createCreep([CARRY,CARRY,MOVE,CARRY,CARRY,MOVE,CARRY,CARRY,MOVE,CARRY,CARRY,MOVE,CARRY,CARRY,MOVE,CARRY,CARRY,MOVE,CARRY,CARRY,MOVE,CARRY,CARRY,MOVE,CARRY,CARRY,MOVE,CARRY,CARRY,MOVE,CARRY,CARRY,MOVE,CARRY,CARRY,MOVE,CARRY,CARRY,MOVE,CARRY,CARRY,MOVE,CARRY,CARRY,MOVE,CARRY,CARRY,MOVE,CARRY,MOVE], undefined, {role: 'busTower', home: 'W68N33'});
+            }     
+        } else if(Game.spawns['Spawn9'].room.energyAvailable < 400){
+            if(Game.spawns['Spawn9'].canCreateCreep() != ERR_BUSY){
+                var newName = Game.spawns['Spawn9'].createCreep([CARRY,CARRY,MOVE,CARRY,CARRY,MOVE], undefined, {role: 'busTower', home: 'W68N33'});
+            }
+        } else {
+            if(Game.spawns['Spawn9'].canCreateCreep() != ERR_BUSY){
+                var newName = Game.spawns['Spawn9'].createCreep([CARRY,CARRY,MOVE,CARRY,CARRY,MOVE,CARRY,CARRY,MOVE,CARRY,CARRY,MOVE,CARRY,CARRY,MOVE,CARRY,CARRY,MOVE,CARRY,CARRY,MOVE,CARRY,CARRY,MOVE], undefined, {role: 'busTower', home: 'W68N33'});
+            }
+        }
+    } else if (sweepRM9.length < 1){
+        if(Game.spawns['Spawn9'].canCreateCreep() != ERR_BUSY){
+        var newName = Game.spawns['Spawn9'].createCreep([CARRY,CARRY,MOVE,CARRY,CARRY,MOVE,CARRY,CARRY,MOVE,MOVE,CARRY,MOVE,CARRY,CARRY,MOVE,CARRY,CARRY,MOVE,CARRY,CARRY,MOVE,MOVE,CARRY,MOVE], undefined, {role: 'sweep', home: 'W68N33'});
+        }
+    } else if (upgraderRM9.length < 1) {
+        if(Game.spawns['Spawn9'].canCreateCreep() != ERR_BUSY){
+        var newName = Game.spawns['Spawn9'].createCreep([WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,WORK,CARRY,CARRY,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE], undefined, {role: 'upgrader', home: 'W68N33', target: 'W68N33', working: false, bstLab: '0', boosted: '1'});
+        }
+    }

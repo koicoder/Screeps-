@@ -1,9 +1,26 @@
-Game.spawns['Spawn32'].memory.rmSource0 = '579fa8750700be0674d2da41';
-Game.spawns['Spawn32'].memory.rmSource1 = '579fa8750700be0674d2da42';
-Game.spawns['Spawn32'].memory.rmContainer0 = '595dd218b82aa8768c187121';
-Game.spawns['Spawn32'].memory.rmContainer1 = '59953406c009eb4713e6a171';
-Game.spawns['Spawn32'].memory.rmDeposit0 = '59eebf5d820bc62ff69d78df';
-Game.spawns['Spawn32'].memory.rmDeposit1 = '5965904698188537b0c44ec5';
+Game.spawns['Spawn8'].memory.rmSource0 = '5836b68d8b8b9619519eee5a';
+Game.spawns['Spawn8'].memory.rmSource1 = '5836b68d8b8b9619519eee5c';
+Game.spawns['Spawn8'].memory.rmContainer0 = '59feaf9cbb83b36a4368a9a0';
+Game.spawns['Spawn8'].memory.rmContainer1 = '59fea8849bd5a06d25975c27';
+Game.spawns['Spawn8'].memory.rmDeposit0 = '59f3d9e54cfc182bf10de6f6';
+Game.spawns['Spawn8'].memory.rmDeposit1 = '59f3edc56e6b9d229d6dc9e2';
+
+Game.spawns['Spawn8'].memory.spawnMemSaver = '0';
+Game.spawns['Spawn9'].memory.spawnMemSaver = '0';
+
+
+Game.spawns['Spawn9'].memory.rmSource0 = '57ef9c5b86f108ae6e60c166';
+Game.spawns['Spawn9'].memory.rmSource1 = '57ef9c5b86f108ae6e60c167';
+Game.spawns['Spawn9'].memory.rmContainer0 = '59fe9f07dacd4908b9fb38a5';
+Game.spawns['Spawn9'].memory.rmContainer1 = '59feaa7568b3ca3cececc598';
+Game.spawns['Spawn9'].memory.rmDeposit0 = '59f9e79b84ccf84a05db1cc7';
+Game.spawns['Spawn9'].memory.rmDeposit1 = '59f9e1a7213866612a41d78c';
+
+
+
+
+
+
 Game.spawns['Spawn32'].memory.exRm1 = 'W57N36';
 Game.spawns['Spawn32'].memory.exRm1Hostiles = false;
 Game.spawns['Spawn32'].memory.exRm1Claimer = false;

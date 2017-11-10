@@ -226,7 +226,7 @@ var roleLabNukeTran = {
                         creep.moveTo(nuke);
                     }
                 }
-            } else{
+            }  else{
             var gohoLab = Game.getObjectById('59d62874323e0348208bcc64');
             var cataLab = Game.getObjectById('59e04cce0ab84515a1fc3273');
             var boostLab = Game.getObjectById('59d5285503606977a110c8f7');
@@ -422,7 +422,7 @@ var roleLabNukeTran = {
                         creep.moveTo(pSpawn);
                     }
                 }
-            } else if(terminal.store[RESOURCE_ENERGY] < 150000){ 
+            } else if(terminal.store[RESOURCE_ENERGY] < 150000){
                 if(total == 0 && terminal.store[RESOURCE_ENERGY] < 150000){
                     if(creep.carry.energy == 0){
                         if(creep.withdraw(container, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE){
@@ -659,6 +659,53 @@ var roleLabNukeTran = {
             }
             
             
+        }
+        
+        if(creep.room.name == 'W68N33'){
+            var boostLab = Game.getObjectById('59fad56b1da7153fb91c39d0');
+            
+        if(creep.carry.energy == 0 && boostLab.energy < 1000){
+            if(creep.withdraw(container, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE){
+                creep.moveTo(container);
+            }
+        } else if(creep.carry[RESOURCE_CATALYZED_GHODIUM_ACID] == undefined && boostLab.mineralAmount < 1500){
+            if(creep.withdraw(terminal, RESOURCE_CATALYZED_GHODIUM_ACID) == ERR_NOT_IN_RANGE){
+                creep.moveTo(terminal);
+            }
+        }
+        
+        if(creep.carry[RESOURCE_ENERGY] > 0 && boostLab.energy < 1000){
+            if(creep.transfer(boostLab, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE){
+                creep.moveTo(boostLab);
+            }
+        } else if(creep.carry[RESOURCE_CATALYZED_GHODIUM_ACID] > 0){
+            if(creep.transfer(boostLab, RESOURCE_CATALYZED_GHODIUM_ACID) == ERR_NOT_IN_RANGE){
+                creep.moveTo(boostLab);
+            }
+        }
+        }
+        if(creep.room.name == 'W76N32'){
+            var boostLab = Game.getObjectById('59fc47f2f7c99f4d3f7d0e41');
+            
+        if(creep.carry.energy == 0 && boostLab.energy < 1000){
+            if(creep.withdraw(container, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE){
+                creep.moveTo(container);
+            }
+        } else if(creep.carry[RESOURCE_CATALYZED_GHODIUM_ACID] == undefined && boostLab.mineralAmount < 1500){
+            if(creep.withdraw(terminal, RESOURCE_CATALYZED_GHODIUM_ACID) == ERR_NOT_IN_RANGE){
+                creep.moveTo(terminal);
+            }
+        }
+        
+        if(creep.carry[RESOURCE_ENERGY] > 0 && boostLab.energy < 1000){
+            if(creep.transfer(boostLab, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE){
+                creep.moveTo(boostLab);
+            }
+        } else if(creep.carry[RESOURCE_CATALYZED_GHODIUM_ACID] > 0){
+            if(creep.transfer(boostLab, RESOURCE_CATALYZED_GHODIUM_ACID) == ERR_NOT_IN_RANGE){
+                creep.moveTo(boostLab);
+            }
+        }
         }
         /*
         if(creep.room.name != 'W62N39'){
